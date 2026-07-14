@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Chivo:ital,wght@0,300;0,400;0,700;0,900&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #AB2232; color: #FEF9EC; }
+  .aw-menu .aw-drop { opacity: 0; visibility: hidden; transform: translate(-50%, 6px); transition: opacity .16s ease, transform .16s ease, visibility .16s; }
+  .aw-menu:hover .aw-drop { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  @keyframes awMorph { 0%,100%{ border-radius:48% 52% 56% 44%/52% 48% 52% 48%; transform:rotate(0deg) scale(1); } 50%{ border-radius:54% 46% 42% 58%/44% 58% 42% 56%; transform:rotate(6deg) scale(1.06); } }
+  @keyframes awFloat { 0%,100%{ transform:translate(-50%,-50%); } 50%{ transform:translate(-50%,-54%); } }
+  @media (prefers-reduced-motion: reduce){ .aw-anim{ animation:none !important; } }
+  [data-aw-root] .aw-rule { transform: scaleX(0); transform-origin:left center; transition: transform .8s cubic-bezier(.22,.61,.36,1); }
+  [data-aw-root] .aw-rule.drawn { transform: scaleX(1); }
+  [data-aw-root] .aw-card { opacity:0; }
+  [data-aw-root] .aw-card.entered { animation: awCardIn .6s cubic-bezier(.22,.61,.36,1) both; }
+  [data-aw-root] .aw-card.aw-shown { opacity:1 !important; animation:none !important; }
+  @media (prefers-reduced-motion: reduce){ [data-aw-root] .aw-rule,[data-aw-root] .aw-card { transform:none !important; opacity:1 !important; transition:none !important; animation:none !important; } }
+  .aw-card { transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease; }
+  .aw-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(12,12,13,0.16); }
+  .aw-pop { transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+  .aw-card:hover .aw-pop { transform: scale(1.1); }
+  .aw-btn { transition: transform .2s ease, box-shadow .2s ease, filter .2s ease; }
+  .aw-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(171,34,50,0.32); filter: brightness(1.05); }
+  .aw-btn:active { transform: translateY(0); box-shadow: none; }
+  .aw-photo img { transition: filter .45s ease; }
+  .aw-photo:hover img { filter: saturate(1.08) brightness(1.04) contrast(1.02); }
+  .aw-navlink { transition: color .18s ease; }
+  .aw-navlink:hover { color: #AB2232; }
+  .aw-burger { display:none; }
+  @media (max-width:980px){
+    .aw-header-inner { position:relative; flex-wrap:nowrap; }
+    .aw-burger { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; margin-left:auto; flex:0 0 auto; border-radius:10px; border:1px solid rgba(76,30,52,0.18); background:#FEF9EC; color:#4C1E34; cursor:pointer; }
+    .aw-burger svg line { transition: transform .2s ease, opacity .2s ease; transform-origin:center; }
+    .aw-nav-cb:checked ~ .aw-burger .awb1 { transform: translateY(6px) rotate(45deg); }
+    .aw-nav-cb:checked ~ .aw-burger .awb2 { opacity:0; }
+    .aw-nav-cb:checked ~ .aw-burger .awb3 { transform: translateY(-6px) rotate(-45deg); }
+    .aw-nav-wrap { position:absolute; top:100%; left:0; right:0; flex-direction:column !important; align-items:stretch !important; gap:4px !important; flex:none !important; background:#F7EBD9; border-bottom:1px solid rgba(76,30,52,0.12); box-shadow:0 24px 34px rgba(12,12,13,0.14); padding:12px 24px 22px; display:none; max-height:calc(100vh - 72px); overflow-y:auto; display:none !important; }
+    .aw-nav-cb:checked ~ .aw-nav-wrap { display:flex !important; }
+    .aw-nav-wrap > nav { flex-direction:column !important; align-items:stretch !important; gap:0 !important; flex:none !important; width:100%; font-size:17px !important; }
+    .aw-nav-wrap > nav > a { padding:13px 4px !important; border-bottom:1px solid rgba(76,30,52,0.08); }
+    .aw-nav-wrap > nav > .aw-menu { padding:8px 4px !important; border-bottom:1px solid rgba(76,30,52,0.08); }
+    .aw-nav-wrap .aw-menu > span:first-child { width:100%; justify-content:space-between; padding:5px 0; }
+    .aw-nav-wrap .aw-drop { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; border:0 !important; background:transparent !important; padding:2px 0 4px 14px !important; min-width:0 !important; }
+    .aw-nav-wrap .aw-drop a { padding:9px 12px !important; }
+    .aw-nav-wrap > div { margin-top:10px; }
+    .aw-nav-wrap > div.aw-btn { justify-content:center; }
+  }
+  .aw-flink { transition: color .18s ease, opacity .18s ease; cursor: pointer; color: inherit; }
+  .aw-flink:hover { color: #FEB18A; opacity: 1; }
+  .aw-footer > div:not(.aw-footer-grid){ padding-left:40px; padding-right:40px; }
+  @media (max-width:980px){ .aw-footer-grid > div{ min-width:0; } }
+  @media (max-width:760px){
+    [style*="minmax(320px, 1fr)"],[style*="minmax(300px, 1fr)"],[style*="minmax(280px, 1fr)"],[style*="minmax(340px,1fr)"],[style*="minmax(340px, 1fr)"],[style*="minmax(0px, 1fr) 420px"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:560px){
+    [style*="max-width: 1320px"]{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  html { scrollbar-gutter: stable both-edges; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  /* card-pad-mobile */
+  @media (max-width:560px){
+    [style*="padding: 46px 42px"],
+    [style*="padding: 44px 48px"],
+    [style*="padding: 40px 44px"],
+    [style*="padding: 52px 52px"],
+    [style*="padding: 48px 56px"],
+    [style*="padding: 48px 52px"],
+    [style*="padding: 42px 44px"],
+    [style*="padding: 30px 34px"],
+    [style*="padding: 34px 36px"]{ padding-left:24px !important; padding-right:24px !important; }
+  }
+  @media (max-width:760px){ .aw-cta-photo{ display:none !important; } }
+  input, textarea, select, button { box-sizing: border-box; max-width: 100%; }
+  /* mobile-safety-v2 */
+  @media (max-width:760px){ .aw-quoteblob{ width:300px !important; height:300px !important; bottom:-120px !important; right:-90px !important; } }
+  @media (max-width:760px){ .aw-qmark{ display:none !important; } }
+  @media (max-width:760px){
+    [style*="grid-template-columns: repeat(2, 1fr)"],
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns: 1fr auto 1fr"],
+    [style*="grid-template-columns: auto 1fr"],
+    [style*="grid-template-columns: 1fr auto"],
+    [style*="grid-template-columns: 2fr 1fr"],
+    [style*="grid-template-columns: 1fr 2fr"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:640px){
+    [style*="font-size: 92px"]{ font-size:40px !important; }
+    [style*="font-size: 88px"]{ font-size:39px !important; }
+    [style*="font-size: 84px"]{ font-size:38px !important; }
+    [style*="font-size: 80px"]{ font-size:37px !important; }
+    [style*="font-size: 76px"]{ font-size:36px !important; }
+    [style*="font-size: 72px"]{ font-size:35px !important; }
+    [style*="font-size: 68px"]{ font-size:34px !important; }
+    [style*="font-size: 64px"]{ font-size:33px !important; }
+    [style*="font-size: 60px"]{ font-size:32px !important; }
+    [style*="font-size: 46px"]{ font-size:29px !important; }
+    [style*="font-size: 44px"]{ font-size:28px !important; }
+    [style*="font-size: 42px"]{ font-size:27px !important; }
+  }
+  @media (max-width:560px){
+    [style*="padding: 88px 40px"],
+    [style*="padding: 80px 40px"],
+    [style*="padding: 76px 40px"],
+    [style*="padding: 72px 40px"],
+    [style*="padding: 64px 40px"]{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  .aw-vf { min-width: 0; }
+  .aw-vf .vf-stars { flex: 0 1 auto; min-width: 0; max-width: 100%; overflow: hidden; }
+  @media (max-width:560px){
+    .aw-vf { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  }
+  @media (max-width:980px){
+    .aw-footer-grid{ grid-template-columns:1fr 1fr !important; gap:36px !important; }
+    .aw-footer{ padding-top:56px !important; }
+  }
+  @media (max-width:600px){
+    .aw-footer-grid{ grid-template-columns:1fr !important; gap:34px !important; }
+    .aw-footer > div{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  @media (max-width:900px){
+    [style*="grid-template-columns: repeat(4, 1fr)"]{ grid-template-columns:repeat(2,1fr) !important; }
+    [style*="grid-template-columns: 1.05fr 0.95fr"],
+    [style*="grid-template-columns: 1.15fr 0.85fr"],
+    [style*="grid-template-columns: 1.04fr 0.96fr"],
+    [style*="grid-template-columns: 1fr 1fr"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:560px){
+    [style*="grid-template-columns: repeat(4, 1fr)"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:640px){
+    [style*="font-size: 58px"]{ font-size:34px !important; }
+    [style*="font-size: 56px"]{ font-size:33px !important; }
+    [style*="font-size: 54px"]{ font-size:32px !important; }
+    [style*="font-size: 52px"]{ font-size:31px !important; }
+    [style*="font-size: 50px"]{ font-size:30px !important; }
+    [style*="font-size: 48px"]{ font-size:30px !important; }
+    [style*="font-size: 46px"]{ font-size:29px !important; }
+    [style*="font-size: 42px"]{ font-size:28px !important; }
+  }
+  .aw-phone { transition: background .2s ease, border-color .2s ease; }
+  .aw-phone:hover { background: rgba(247,235,217,0.22); border-color: rgba(247,235,217,0.6); }
+  .aw-vf { transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+  .aw-vf:hover { background: rgba(247,235,217,0.12); border-color: rgba(247,235,217,0.4); transform: translateY(-2px); }
+  #vf-stars img { max-width: 100%; height: auto; }
+  #vf-stars > * { max-width: 100% !important; }
+  @media (prefers-reduced-motion: reduce){ .aw-card,.aw-pop,.aw-btn,.aw-photo img{ transition:none !important; } .aw-card:hover,.aw-btn:hover{ transform:none !important; } .aw-card:hover .aw-pop{ transform:none !important; } .aw-photo:hover img{ filter:none !important; } }
+  @keyframes awCardIn { from{ opacity:0; transform:translateY(20px) scale(.96); } to{ opacity:1; transform:none; } }
+  .aw-tab { transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease; }
+  .aw-tab:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(76,30,52,0.16); }
+  .aw-tab-ghost:hover { border-color:#AB2232; color:#AB2232; }
+  .aw-tab-solid:hover { filter: brightness(1.07); }
+  @media (prefers-reduced-motion: reduce){ .aw-tab{ transition:none !important; } .aw-tab:hover{ transform:none !important; } }
+</style>
+</helmet>
+
+<div data-aw-root style="background:#F7EBD9;font-family:Chivo,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#4C1E34;width:100%;overflow-x:hidden;">
+
+  <!-- ===== HEADER ===== -->
+  <header style="position:sticky;top:0;z-index:50;background:rgba(247,235,217,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(76,30,52,0.1);">
+    <div class="aw-header-inner" style="max-width:1320px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;gap:32px;">
+      <div style="color:#4C1E34;width:88px;flex:0 0 auto;">
+        <svg viewBox="0 0 148.802 98.231" style="width:100%;height:auto;display:block;" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fillRule="nonzero" transform="translate(61.31 67.171)" d="M 8.95 0.01 L 9.99 0.01 L 7.86 7.78 L 6.87 7.78 L 5.23 1.86 C 5.09 1.37 5.01 1.06 4.99 0.95 C 4.91 1.31 4.83 1.61 4.76 1.86 L 3.11 7.78 L 2.06 7.78 L 0 0.01 L 1.06 0.01 L 2.24 5.1 C 2.37 5.63 2.48 6.16 2.57 6.69 C 2.77 5.86 2.88 5.38 2.92 5.25 L 4.4 0 L 5.64 0 L 6.75 3.93 C 7.03 4.9 7.23 5.82 7.36 6.68 C 7.46 6.19 7.59 5.63 7.75 4.99 L 8.97 0 L 8.95 0.01 Z M 18.04 4.22 L 22.35 4.22 L 22.35 3.31 L 18.04 3.31 L 18.04 0.93 L 22.64 0.93 L 22.64 0.01 L 17.01 0.01 L 17.01 7.78 L 22.82 7.78 L 22.82 6.86 L 18.04 6.86 L 18.04 4.22 Z M 32.92 0.01 L 36.11 7.78 L 34.94 7.78 L 34.03 5.43 L 30.78 5.43 L 29.93 7.78 L 28.84 7.78 L 31.83 0.01 L 32.94 0.01 L 32.92 0.01 Z M 33.71 4.59 L 32.9 2.44 C 32.65 1.79 32.47 1.25 32.35 0.83 C 32.25 1.33 32.11 1.82 31.93 2.31 L 31.07 4.59 L 33.71 4.59 Z M 43.36 0.01 L 42.33 0.01 L 42.33 7.78 L 47.19 7.78 L 47.19 6.86 L 43.36 6.86 L 43.36 0.01 Z M 53.28 0.93 L 55.85 0.93 L 55.85 7.78 L 56.88 7.78 L 56.88 0.93 L 59.46 0.93 L 59.46 0.01 L 53.29 0.01 L 53.29 0.93 L 53.28 0.93 Z M 71.46 0.01 L 71.46 3.2 L 67.41 3.2 L 67.41 0.01 L 66.38 0.01 L 66.38 7.78 L 67.41 7.78 L 67.41 4.12 L 71.46 4.12 L 71.46 7.78 L 72.49 7.78 L 72.49 0.01 L 71.46 0.01 Z" /><path fillRule="nonzero" transform="translate(67.52 0)" d="M 3.26 22.571 C 11.38 3.841 21.05 3.021 22.63 3.021 C 22.75 3.021 22.83 3.021 22.85 3.021 L 22.93 3.021 L 23.02 3.021 L 23.04 3.021 C 31.92 3.021 41.12 13.741 41.21 13.841 C 41.28 13.921 44.12 17.331 48.49 22.551 L 52.4 22.551 C 47.12 16.251 43.58 12.011 43.5 11.911 C 43.09 11.431 33.34 0.061 23.08 0.021 C 21.69 -0.099 9.49 -0.419 0 22.551 L 3.26 22.551 L 3.26 22.571 Z" /><path fillRule="nonzero" transform="translate(50.408 44.321)" d="M 92.912 5.96 C 91.232 3.99 89.532 1.99 87.842 0 L 86.642 3.23 C 87.972 4.8 89.302 6.36 90.622 7.91 C 94.132 12.03 95.802 17.03 95.322 21.99 C 94.862 26.76 92.412 31.14 88.402 34.34 C 82.582 38.98 74.782 40.7 67.242 42.37 C 65.802 42.69 64.382 43 62.992 43.33 C 59.832 44.08 56.552 45.05 53.082 46.08 C 42.792 49.13 31.122 52.59 21.472 50 C 10.642 47.09 3.052 38.18 2.992 28.33 C 2.982 26.26 3.172 24.21 3.512 22.18 L 0.472 22.18 C 0.162 24.21 -0.018 26.26 0.002 28.34 C 0.062 39.53 8.572 49.63 20.702 52.89 C 23.372 53.61 26.142 53.91 28.962 53.91 C 37.242 53.91 45.992 51.31 53.942 48.95 C 57.372 47.93 60.612 46.97 63.692 46.24 C 65.062 45.91 66.472 45.6 67.892 45.29 C 75.772 43.55 83.911 41.76 90.271 36.68 C 94.911 32.97 97.772 27.86 98.302 22.27 C 98.852 16.49 96.932 10.7 92.902 5.96 L 92.912 5.96 Z" /><path fillRule="nonzero" transform="translate(0 25.361)" d="M 7.92 29.37 L 6.42 38.13 L 0 38.13 L 6.18 4.18 C 6.62 1.76 8.73 0 11.19 0 C 13.66 0 15.77 1.77 16.2 4.19 L 22.29 38.13 L 15.82 38.13 L 14.36 29.37 L 7.92 29.37 Z M 10.86 10.72 L 8.87 23.77 L 13.45 23.77 L 11.46 10.72 C 11.41 10.37 10.91 10.37 10.86 10.72 Z" /><path fillRule="nonzero" transform="translate(26.56 25.361)" d="M 9.74 38.61 C 7.03 38.61 4.73 37.73 2.84 35.97 C 0.95 34.21 0 32.07 0 29.56 L 0 0 L 6.04 0 L 6.04 29.5 C 6.04 30.41 6.39 31.18 7.08 31.82 C 7.78 32.46 8.61 32.78 9.58 32.78 C 10.55 32.78 11.4 32.46 12.08 31.82 C 12.76 31.18 13.1 30.41 13.1 29.5 L 13.1 0 L 19.54 0 L 19.54 29.56 C 19.54 32.11 18.58 34.26 16.67 36 C 14.75 37.74 12.44 38.61 9.73 38.61 L 9.74 38.61 Z" /><path fillRule="nonzero" transform="translate(51.58 25.361)" d="M 19.4 29.01 C 19.4 31.52 18.45 33.66 16.55 35.45 C 14.65 37.23 12.37 38.13 9.7 38.13 L 0 38.13 L 0 0 L 9.7 0 C 12.39 0 14.68 0.89 16.57 2.68 C 18.46 4.46 19.4 6.6 19.4 9.1 L 19.4 29.02 L 19.4 29.01 Z M 6.18 32.44 L 9.9 32.44 C 10.88 32.44 11.71 32.11 12.38 31.45 C 13.05 30.79 13.39 30.01 13.39 29.12 L 13.39 9.18 C 13.39 8.27 13.05 7.5 12.36 6.85 C 11.67 6.2 10.85 5.88 9.9 5.88 L 6.18 5.88 L 6.18 32.45 L 6.18 32.44 Z" /><path fillRule="nonzero" transform="translate(76.39 25.361)" d="M 16.84 38.13 L 0 38.13 L 0 0 L 6.17 0 L 6.17 32.42 L 16.83 32.42 L 16.83 38.13 L 16.84 38.13 Z" /><path fillRule="nonzero" transform="translate(97.45 25.361)" d="M 0 38.13 L 0 0 L 17.58 0 L 17.58 5.75 L 6.18 5.75 L 6.18 16.2 L 14.51 16.2 L 14.51 21.95 L 6.18 21.95 L 6.18 32.38 L 17.58 32.38 L 17.58 38.13 L 0 38.13 Z" /><path fillRule="nonzero" transform="translate(119.27 25.361)" d="M 8.26 22.16 L 0 0 L 6.78 0 L 11.37 13.69 L 15.92 0 L 22.74 0 L 14.43 22.16 L 14.43 38.13 L 8.26 38.13 L 8.26 22.16 Z" /></svg>
+      </div>
+      <input type="checkbox" id="awNavCb" class="aw-nav-cb" style="display:none;" /><label for="awNavCb" class="aw-burger" aria-label="Toggle menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line class="awb1" x1="3" y1="6" x2="21" y2="6"></line><line class="awb2" x1="3" y1="12" x2="21" y2="12"></line><line class="awb3" x1="3" y1="18" x2="21" y2="18"></line></svg></label><div class="aw-nav-wrap" style="display:flex;align-items:center;gap:32px;flex:1;"><nav style="display:flex;gap:26px;font-size:15px;color:#4C1E34;flex:1;align-items:center;">
+        <a href="Homepage.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Home</a>
+        <a href="About Us.dc.html" style="cursor:pointer;color:#F3360D;font-weight:700;text-decoration:none;">About Us</a>
+        <a href="Client Stories.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Client Stories</a>
+        <div class="aw-menu" style="position:relative;cursor:pointer;padding:6px 0;">
+          <span class="aw-navlink" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">Services <span style="font-size:9px;line-height:1;">&#9660;</span></span>
+          <div class="aw-drop" style="position:absolute;top:100%;left:50%;min-width:200px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:12px;box-shadow:0 14px 34px rgba(12,12,13,0.14);padding:8px;z-index:60;">
+            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Pensions</a>
+            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Investments</a>
+          </div>
+        </div>
+        <a href="Financial Focus.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Financial Focus</a>
+        <a href="News.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">News</a>
+        <a href="Contact Us.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Contact Us</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:8px;flex:0 0 auto;">
+        <span style="width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9742;</span>
+        <a href="tel:01727227557" style="font-weight:700;font-size:15px;color:#212832;text-decoration:none;">01727 227557</a>
+      </div>
+      <div class="aw-btn" style="display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 24px;border-radius:10px;background:#AB2232;color:#FEF9EC;font-weight:700;font-size:15px;flex:0 0 auto;cursor:pointer;">Login</div></div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section style="position:relative;overflow:hidden;background:#4C1E34;">
+    <div class="aw-anim" style="position:absolute;left:-300px;top:-340px;width:660px;height:660px;border-radius:48% 52% 56% 44%/52% 48% 52% 48%;background:linear-gradient(67.445deg,#CDDFDD 36.59%,#FEB18A 111.98%);opacity:0.26;animation:awMorph 22s ease-in-out infinite;"></div>
+    <div style="position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:64px 40px 58px;">
+      <div style="font-size:14px;color:#F7EBD9;margin-bottom:22px;"><span style="opacity:0.6;">Home</span><span style="opacity:0.35;margin:0 8px;">/</span><span style="opacity:0.6;">About Us</span><span style="opacity:0.35;margin:0 8px;">/</span><span style="color:#FEB18A;font-weight:700;">Our Team</span></div>
+      <div style="font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#FEB18A;font-weight:700;margin-bottom:16px;">Meet the team</div>
+      <h1 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:76px;line-height:1;margin:0 0 34px;color:#F7EBD9;">Our Team</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        <sc-if value="{{ alunOn }}" hint-placeholder-val="{{ true }}"><div onClick="{{ goAlun }}" class="aw-tab aw-tab-solid" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid #AB2232;background:#AB2232;color:#FEF9EC;">Alun Webster</div></sc-if>
+        <sc-if value="{{ alunOff }}" hint-placeholder-val="{{ false }}"><div onClick="{{ goAlun }}" class="aw-tab aw-tab-ghost" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid rgba(247,235,217,0.4);background:transparent;color:#F7EBD9;">Alun Webster</div></sc-if>
+        <sc-if value="{{ jennyOn }}" hint-placeholder-val="{{ false }}"><div onClick="{{ goJenny }}" class="aw-tab aw-tab-solid" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid #AB2232;background:#AB2232;color:#FEF9EC;">Jenny Vernadakis</div></sc-if>
+        <sc-if value="{{ jennyOff }}" hint-placeholder-val="{{ true }}"><div onClick="{{ goJenny }}" class="aw-tab aw-tab-ghost" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid rgba(247,235,217,0.4);background:transparent;color:#F7EBD9;">Jenny Vernadakis</div></sc-if>
+        <sc-if value="{{ kerrieOn }}" hint-placeholder-val="{{ false }}"><div onClick="{{ goKerrie }}" class="aw-tab aw-tab-solid" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid #AB2232;background:#AB2232;color:#FEF9EC;">Kerrie Veranes</div></sc-if>
+        <sc-if value="{{ kerrieOff }}" hint-placeholder-val="{{ true }}"><div onClick="{{ goKerrie }}" class="aw-tab aw-tab-ghost" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid rgba(247,235,217,0.4);background:transparent;color:#F7EBD9;">Kerrie Veranes</div></sc-if>
+        <sc-if value="{{ jillOn }}" hint-placeholder-val="{{ false }}"><div onClick="{{ goJill }}" class="aw-tab aw-tab-solid" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid #AB2232;background:#AB2232;color:#FEF9EC;">Jill Rowland</div></sc-if>
+        <sc-if value="{{ jillOff }}" hint-placeholder-val="{{ true }}"><div onClick="{{ goJill }}" class="aw-tab aw-tab-ghost" style="cursor:pointer;padding:11px 22px;border-radius:10px;font-weight:700;font-size:15px;border:2px solid rgba(247,235,217,0.4);background:transparent;color:#F7EBD9;">Jill Rowland</div></sc-if>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROFILE: ALUN (full) ===== -->
+  <sc-if value="{{ alunOn }}" hint-placeholder-val="{{ true }}">
+  <section style="background:#F7EBD9;padding:24px 0 88px;">
+    <div style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:80px;align-items:start;">
+      <div>
+        <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:10px;">Independent Financial Advisor</div>
+        <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:46px;line-height:1.06;color:#4C1E34;margin:0 0 16px;">Alun Webster</h2>
+        <div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:28px;"></div>
+        <p style="font-size:18px;line-height:1.78;color:#4C1E34;margin:0 0 40px;max-width:560px;">Alun started work in financial service in 1999 straight from University, for a large National IFA firm, getting a grounding in aspects of financial advice, completing his financial planning exams. From there Alun joined a smaller directly authorised IFA practice, before branching out to establish Audley in 2017. Where he can put the client at the centre to help them achieve their goals in life.</p>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 16px;">Specialisation</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:44px;">
+          <span style="display:inline-flex;align-items:center;padding:9px 18px;border-radius:999px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.16);font-size:14px;font-weight:700;color:#4C1E34;">Retirement Planning</span>
+          <span style="display:inline-flex;align-items:center;padding:9px 18px;border-radius:999px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.16);font-size:14px;font-weight:700;color:#4C1E34;">Investments</span>
+          <span style="display:inline-flex;align-items:center;padding:9px 18px;border-radius:999px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.16);font-size:14px;font-weight:700;color:#4C1E34;">Tax Planning</span>
+          <span style="display:inline-flex;align-items:center;padding:9px 18px;border-radius:999px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.16);font-size:14px;font-weight:700;color:#4C1E34;">Estate Planning</span>
+        </div>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 18px;">Audley Wealth</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:520px;">
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">St Albans</strong>Censeo House, 6 St Peter&rsquo;s Street, St Albans, AL1 3LF</div>
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">London</strong>200 Aldersgate St, London EC1A 4HD</div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:1;width:100%;">
+          <img src="brand/team-alun.webp" alt="Alun Webster" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;-webkit-mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;" />
+        </div>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:14px;padding:22px 24px;margin-top:24px;display:flex;flex-direction:column;gap:14px;">
+          <a href="mailto:a.webster@audleywealth.com" class="aw-navlink" style="display:flex;align-items:center;gap:12px;color:#4C1E34;text-decoration:none;font-size:14px;font-weight:700;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9993;</span>a.webster@audleywealth.com</a>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9742;</span>Switchboard <a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227557</a></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9742;</span>Direct Dial <a href="tel:01727227558" style="color:inherit;text-decoration:none;">01727 227558</a></div>
+          <a href="https://www.linkedin.com/in/alun-webster-37a597a/" target="_blank" rel="noopener noreferrer" class="aw-navlink" style="display:inline-flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;text-decoration:none;font-weight:700;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.24 8h4.5v13H.24V8zm7.5 0h4.31v1.78h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V21h-4.5v-5.8c0-1.38-.03-3.16-1.93-3.16-1.93 0-2.22 1.5-2.22 3.06V21h-4.5V8z"/></svg></span>LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===== PROFILE: JENNY (placeholder) ===== -->
+  <sc-if value="{{ jennyOn }}" hint-placeholder-val="{{ false }}">
+  <section style="background:#F7EBD9;padding:24px 0 88px;">
+    <div style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:80px;align-items:start;">
+      <div>
+        <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:10px;">Administrator</div>
+        <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:46px;line-height:1.06;color:#4C1E34;margin:0 0 16px;">Jenny Vernadakis</h2>
+        <div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:30px;"></div>
+        <p style="font-size:18px;line-height:1.78;color:#4C1E34;margin:0 0 40px;max-width:560px;opacity:0.5;font-style:italic;">Profile coming soon</p>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 16px;">Specialisation</h3>
+        <div style="margin-bottom:44px;font-size:15px;color:#4C1E34;opacity:0.5;font-style:italic;max-width:560px;">Profile coming soon</div>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 18px;">Audley Wealth</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:520px;">
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">St Albans</strong>Censeo House, 6 St Peter&rsquo;s Street, St Albans, AL1 3LF</div>
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">London</strong>200 Aldersgate St, London EC1A 4HD</div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:1;width:100%;">
+          <img src="brand/team-jenny.webp" alt="Jenny Vernadakis" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;-webkit-mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;" />
+        </div>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:14px;padding:22px 24px;margin-top:24px;display:flex;flex-direction:column;gap:14px;">
+          <a href="mailto:j.vernadakis@audleywealth.com" class="aw-navlink" style="display:flex;align-items:center;gap:12px;color:#4C1E34;text-decoration:none;font-size:14px;font-weight:700;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9993;</span>j.vernadakis@audleywealth.com</a>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9742;</span>Direct Dial <a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227557</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===== PROFILE: KERRIE (placeholder) ===== -->
+  <sc-if value="{{ kerrieOn }}" hint-placeholder-val="{{ false }}">
+  <section style="background:#F7EBD9;padding:24px 0 88px;">
+    <div style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:80px;align-items:start;">
+      <div>
+        <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:10px;">Administrator</div>
+        <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:46px;line-height:1.06;color:#4C1E34;margin:0 0 16px;">Kerrie Veranes</h2>
+        <div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:30px;"></div>
+        <p style="font-size:18px;line-height:1.78;color:#4C1E34;margin:0 0 40px;max-width:560px;opacity:0.5;font-style:italic;">Profile coming soon</p>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 16px;">Specialisation</h3>
+        <div style="margin-bottom:44px;font-size:15px;color:#4C1E34;opacity:0.5;font-style:italic;max-width:560px;">Profile coming soon</div>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 18px;">Audley Wealth</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:520px;">
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">St Albans</strong>Censeo House, 6 St Peter&rsquo;s Street, St Albans, AL1 3LF</div>
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">London</strong>200 Aldersgate St, London EC1A 4HD</div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:1;width:100%;">
+          <img src="brand/team-kerrie.webp" alt="Kerrie Veranes" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;-webkit-mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;" />
+        </div>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:14px;padding:22px 24px;margin-top:24px;display:flex;flex-direction:column;gap:14px;">
+          <a href="mailto:k.veranes@audleywealth.com" class="aw-navlink" style="display:flex;align-items:center;gap:12px;color:#4C1E34;text-decoration:none;font-size:14px;font-weight:700;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9993;</span>k.veranes@audleywealth.com</a>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9742;</span>Direct Dial <a href="tel:01727227558" style="color:inherit;text-decoration:none;">01727 227558</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===== PROFILE: JILL (placeholder) ===== -->
+  <sc-if value="{{ jillOn }}" hint-placeholder-val="{{ false }}">
+  <section style="background:#F7EBD9;padding:24px 0 88px;">
+    <div style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:80px;align-items:start;">
+      <div>
+        <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:10px;">Administrator</div>
+        <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:46px;line-height:1.06;color:#4C1E34;margin:0 0 16px;">Jill Rowland</h2>
+        <div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:30px;"></div>
+        <p style="font-size:18px;line-height:1.78;color:#4C1E34;margin:0 0 40px;max-width:560px;opacity:0.5;font-style:italic;">Profile coming soon</p>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 16px;">Specialisation</h3>
+        <div style="margin-bottom:44px;font-size:15px;color:#4C1E34;opacity:0.5;font-style:italic;max-width:560px;">Profile coming soon</div>
+        <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:17px;color:#4C1E34;margin:0 0 18px;">Audley Wealth</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:520px;">
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">St Albans</strong>Censeo House, 6 St Peter&rsquo;s Street, St Albans, AL1 3LF</div>
+          <div style="border-top:2px solid #AB2232;padding-top:14px;font-size:15px;line-height:1.6;color:#4C1E34;"><strong style="display:block;font-size:16px;margin-bottom:4px;">London</strong>200 Aldersgate St, London EC1A 4HD</div>
+        </div>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:1;width:100%;">
+          <img src="brand/team-jill.webp" alt="Jill Rowland" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;-webkit-mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;mask:url(data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%27-64%20-20%20600%20600%27%3E%3Cpath%20fill=%27%23000%27%20d=%27M476.701%20247.617C476.701%20247.617%20384.618%20383.813%20301.743%20500.758C261.517%20557.537%20188.909%20571.465%20132.569%20528.78C88.4724%20495.345%2065.4707%20439.333%2040.5899%20391.702C3.93419%20321.5%20-61.2908%20238.781%20-60.1227%20156.502C-59.1963%2090.9861%20-20.8133%2026.0114%2044.9977%208.92357C134.099%20-14.2053%20229.025%2019.5987%20317.482%2030.3684C501.911%2052.802%20513.93%20128.171%20513.93%20128.171C524.037%20175.486%20476.701%20247.617%20476.701%20247.617Z%27/%3E%3C/svg%3E) center/100% 100% no-repeat;" />
+        </div>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:14px;padding:22px 24px;margin-top:24px;display:flex;flex-direction:column;gap:14px;">
+          <a href="mailto:j.rowland@audleywealth.com" class="aw-navlink" style="display:flex;align-items:center;gap:12px;color:#4C1E34;text-decoration:none;font-size:14px;font-weight:700;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9993;</span>j.rowland@audleywealth.com</a>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:#4C1E34;"><span style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9742;</span>Direct Dial 0131 654 9819</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+
+
+  <!-- ===== CONTENT BLOCKS ===== -->
+  <sc-for list="{{ svc.blocks }}" as="b" hint-placeholder-count="0">
+
+    <sc-if value="{{ b.isQuote }}" hint-placeholder-val="{{ false }}">
+      <section style="position:relative;overflow:hidden;background:#4C1E34;padding:88px 40px;text-align:center;">
+        <img src="brand/blob-fill-sage.svg" alt="" aria-hidden="true" class="aw-quoteblob" style="position:absolute;bottom:-220px;right:-160px;width:560px;height:560px;opacity:0.14;pointer-events:none;z-index:0;" />
+        <div style="position:relative;z-index:2;max-width:1000px;margin:0 auto;font-family:'Alfa Slab One',serif;font-weight:400;font-size:54px;line-height:1.18;color:#F7EBD9;">{{ b.quoteText }}</div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ b.isHighlight }}" hint-placeholder-val="{{ false }}">
+      <section style="background:#86B3A8;padding:80px 40px;">
+        <div style="max-width:880px;margin:0 auto;">
+          <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:40px;line-height:1.14;color:#4C1E34;margin:0 0 28px;">{{ b.heading }}</h2>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px;">
+            <sc-for list="{{ b.list }}" as="li" hint-placeholder-count="4">
+              <div style="padding:16px 2px;border-top:1px solid rgba(76,30,52,0.3);font-size:18px;line-height:1.5;color:#4C1E34;">{{ li }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ b.isPhoto }}" hint-placeholder-val="{{ false }}">
+      <section style="overflow:hidden;">
+        <sc-if value="{{ b.onPensions }}" hint-placeholder-val="{{ false }}"><img src="brand/band-pensions.webp" alt="" style="display:block;width:100%;height:440px;object-fit:cover;object-position:center;" /></sc-if>
+        <sc-if value="{{ b.onInvestments }}" hint-placeholder-val="{{ false }}"><img src="brand/band-investments.webp" alt="" style="display:block;width:100%;height:440px;object-fit:cover;object-position:center 28%;" /></sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ b.isDiagram }}" hint-placeholder-val="{{ false }}">
+      <section style="background:#F7EBD9;padding:76px 40px;">
+        <div style="max-width:940px;margin:0 auto;">
+
+          <!-- Diagram: Accumulation -> Decumulation -->
+          <sc-if value="{{ b.diagAccum }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:12px;">Two phases</div>
+            <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.14;color:#4C1E34;margin:0 0 40px;">The two stages of retirement planning</h3>
+            <div style="position:relative;display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:0;">
+              <div style="position:absolute;left:8%;right:8%;top:38px;height:4px;background:linear-gradient(90deg,#86B3A8 0%,#FEB18A 100%);border-radius:2px;z-index:0;"></div>
+              <div class="aw-card" style="position:relative;z-index:1;background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:28px 26px;box-shadow:0 6px 18px rgba(12,12,13,0.05);">
+                <div class="aw-pop" style="width:44px;height:44px;border-radius:50%;background:#86B3A8;color:#4C1E34;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg>
+                </div>
+                <div style="font-family:'Alfa Slab One',serif;font-size:20px;color:#4C1E34;margin-bottom:8px;">Accumulation</div>
+                <div style="font-size:15px;line-height:1.6;color:#4C1E34;">The period where an individual builds their retirement provision.</div>
+              </div>
+              <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 26px;">
+                <div style="width:80px;height:80px;border-radius:50%;background:#AB2232;color:#FEF9EC;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 20px rgba(171,34,50,0.3);">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><circle cx="12" cy="12" r="6"></circle></svg>
+                </div>
+                <div style="font-weight:700;font-size:14px;color:#4C1E34;margin-top:14px;text-align:center;line-height:1.3;">Retirement<br />(taking benefits)</div>
+              </div>
+              <div class="aw-card" style="position:relative;z-index:1;background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:28px 26px;box-shadow:0 6px 18px rgba(12,12,13,0.05);">
+                <div class="aw-pop" style="width:44px;height:44px;border-radius:50%;background:#FEB18A;color:#4C1E34;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg>
+                </div>
+                <div style="font-family:'Alfa Slab One',serif;font-size:20px;color:#4C1E34;margin-bottom:8px;">Decumulation</div>
+                <div style="font-size:15px;line-height:1.6;color:#4C1E34;">When you stop working, or reduce hours to transition to full retirement.</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Diagram: Investment process -->
+          <sc-if value="{{ b.diagProcess }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:12px;">Our investment process</div>
+            <h3 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.14;color:#4C1E34;margin:0 0 40px;">A rigorous, repeatable approach</h3>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+              <div class="aw-card" style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:26px 22px;box-shadow:0 6px 18px rgba(12,12,13,0.05);">
+                <div class="aw-pop" style="width:40px;height:40px;border-radius:50%;background:#4C1E34;color:#FEF9EC;font-family:'Alfa Slab One',serif;font-size:17px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">1</div>
+                <div style="font-weight:700;font-size:17px;color:#4C1E34;margin-bottom:8px;">Discovery</div>
+                <div style="font-size:14px;line-height:1.55;color:#4C1E34;">Understand your objectives, wealth, experience and attitude to risk.</div>
+              </div>
+              <div class="aw-card" style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:26px 22px;box-shadow:0 6px 18px rgba(12,12,13,0.05);">
+                <div class="aw-pop" style="width:40px;height:40px;border-radius:50%;background:#4C1E34;color:#FEF9EC;font-family:'Alfa Slab One',serif;font-size:17px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">2</div>
+                <div style="font-weight:700;font-size:17px;color:#4C1E34;margin-bottom:8px;">Asset allocation</div>
+                <div style="font-size:14px;line-height:1.55;color:#4C1E34;">Choose the type of assets and how they are spread geographically.</div>
+              </div>
+              <div class="aw-card" style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:26px 22px;box-shadow:0 6px 18px rgba(12,12,13,0.05);">
+                <div class="aw-pop" style="width:40px;height:40px;border-radius:50%;background:#4C1E34;color:#FEF9EC;font-family:'Alfa Slab One',serif;font-size:17px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">3</div>
+                <div style="font-weight:700;font-size:17px;color:#4C1E34;margin-bottom:8px;">Asset selection</div>
+                <div style="font-size:14px;line-height:1.55;color:#4C1E34;">Select individual assets based on comprehensive research of the market.</div>
+              </div>
+              <div class="aw-card" style="background:#4C1E34;border-radius:16px;padding:26px 22px;box-shadow:0 6px 18px rgba(12,12,13,0.12);">
+                <div class="aw-pop" style="width:40px;height:40px;border-radius:50%;background:#AB2232;color:#FEF9EC;font-family:'Alfa Slab One',serif;font-size:17px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">4</div>
+                <div style="font-weight:700;font-size:17px;color:#FEF9EC;margin-bottom:8px;">Regular reviews</div>
+                <div style="font-size:14px;line-height:1.55;color:#FEF9EC;opacity:0.9;">Review risk, asset allocation, selection and performance.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:20px;color:#AB2232;font-weight:700;font-size:14px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3L3 16"></path><path d="M3 21v-5h5"></path></svg>
+              An ongoing cycle &mdash; we are always available between reviews
+            </div>
+          </sc-if>
+
+          <!-- Diagram: Cash buffer -->
+          <sc-if value="{{ b.diagBuffer }}" hint-placeholder-val="{{ false }}">
+            <div class="aw-card" style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:18px;padding:40px 44px;box-shadow:0 6px 18px rgba(12,12,13,0.05);display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center;">
+              <div style="text-align:center;">
+                <div class="aw-pop" style="font-family:'Alfa Slab One',serif;font-size:76px;line-height:0.9;color:#AB2232;">3&ndash;6</div>
+                <div style="font-weight:700;font-size:15px;color:#4C1E34;margin-top:6px;">months' net income</div>
+              </div>
+              <div>
+                <div style="font-size:16px;line-height:1.6;color:#4C1E34;margin-bottom:20px;">We suggest clients retain an amount readily accessible on deposit equivalent to <strong>3&ndash;6 months' net income as a minimum</strong> &mdash; for the unexpected.</div>
+                <div style="display:flex;gap:8px;">
+                  <div style="flex:1;height:16px;border-radius:4px;background:#AB2232;"></div>
+                  <div style="flex:1;height:16px;border-radius:4px;background:#AB2232;"></div>
+                  <div style="flex:1;height:16px;border-radius:4px;background:#AB2232;"></div>
+                  <div style="flex:1;height:16px;border-radius:4px;background:#C97B84;"></div>
+                  <div style="flex:1;height:16px;border-radius:4px;background:#C97B84;"></div>
+                  <div style="flex:1;height:16px;border-radius:4px;background:#C97B84;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:rgba(76,30,52,0.6);">
+                  <span>Month 1</span><span>Month 6</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ b.isCross }}" hint-placeholder-val="{{ false }}">
+      <section style="background:#F7EBD9;padding:64px 40px;">
+        <div style="max-width:880px;margin:0 auto;background:#FEF9EC;border:1px solid rgba(76,30,52,0.14);border-radius:18px;padding:44px 48px;box-shadow:0 4px 12px rgba(12,12,13,0.05);">
+          <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:10px;">{{ b.sub }}</div>
+          <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:34px;line-height:1.12;color:#4C1E34;margin:0 0 16px;">{{ b.heading }}</h2>
+          <sc-for list="{{ b.paras }}" as="p" hint-placeholder-count="1">
+            <p style="font-size:17px;line-height:1.7;color:#4C1E34;margin:0 0 22px;">{{ p }}</p>
+          </sc-for>
+          <div onClick="{{ b.onLink }}" class="aw-btn" style="display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 32px;border-radius:10px;background:#AB2232;color:#FEF9EC;font-weight:700;font-size:16px;cursor:pointer;">{{ b.linkLabel }}</div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ b.isSection }}" hint-placeholder-val="{{ true }}">
+
+      <sc-if value="{{ b.hasSide }}" hint-placeholder-val="{{ false }}">
+        <section style="background:#F7EBD9;padding:72px 40px;">
+          <div style="max-width:880px;margin:0 auto;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;align-items:stretch;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(12,12,13,0.1);background:#FEF9EC;">
+              <div style="padding:46px 42px;">
+                <sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:12px;">{{ b.sub }}</div>
+                </sc-if>
+                <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:36px;line-height:1.14;color:#4C1E34;margin:0 0 10px;">{{ b.heading }}</h2>
+                <div class="aw-rule" style="width:90px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:24px;"></div>
+                <sc-for list="{{ b.paras }}" as="p" hint-placeholder-count="2">
+                  <p style="font-size:16px;line-height:1.72;color:#4C1E34;margin:0 0 18px;">{{ p }}</p>
+                </sc-for>
+              </div>
+              <div style="min-height:460px;background:#D9D9D9;">
+                <sc-if value="{{ b.onPensions }}" hint-placeholder-val="{{ false }}"><img src="brand/side-pensions.webp" alt="Pension planning with an Audley adviser" style="display:block;width:100%;height:100%;object-fit:cover;" /></sc-if>
+                <sc-if value="{{ b.onInvestments }}" hint-placeholder-val="{{ false }}"><img src="brand/side-investments.webp" alt="Investment planning with an Audley adviser" style="display:block;width:100%;height:100%;object-fit:cover;" /></sc-if>
+              </div>
+            </div>
+            <sc-for list="{{ b.more }}" as="p" hint-placeholder-count="0">
+              <p style="font-size:17px;line-height:1.75;color:#4C1E34;margin:26px 0 0;">{{ p }}</p>
+            </sc-for>
+            <sc-if value="{{ b.hasListIntro }}" hint-placeholder-val="{{ false }}">
+              <p style="font-size:17px;line-height:1.7;color:#4C1E34;font-weight:700;margin:32px 0 12px;">{{ b.listIntro }}</p>
+            </sc-if>
+            <sc-if value="{{ b.hasList }}" hint-placeholder-val="{{ false }}">
+              <div style="margin:4px 0 8px;">
+                <sc-for list="{{ b.list }}" as="li" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-top:1px solid rgba(76,30,52,0.14);">
+                    <span style="flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#AB2232;margin-top:8px;"></span>
+                    <span style="font-size:16px;line-height:1.6;color:#4C1E34;">{{ li }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-for list="{{ b.tail }}" as="p" hint-placeholder-count="0">
+              <p style="font-size:17px;line-height:1.75;color:#4C1E34;margin:20px 0 0;">{{ p }}</p>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ b.noSide }}" hint-placeholder-val="{{ true }}">
+        <section style="background:#F7EBD9;padding:72px 40px;">
+          <div style="max-width:880px;margin:0 auto;">
+            <sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#AB2232;font-weight:700;margin-bottom:12px;">{{ b.sub }}</div>
+            </sc-if>
+            <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:40px;line-height:1.14;color:#4C1E34;margin:0 0 10px;">{{ b.heading }}</h2>
+            <div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:30px;"></div>
+            <sc-for list="{{ b.paras }}" as="p" hint-placeholder-count="2">
+              <p style="font-size:17px;line-height:1.75;color:#4C1E34;margin:0 0 20px;">{{ p }}</p>
+            </sc-for>
+            <sc-if value="{{ b.hasListIntro }}" hint-placeholder-val="{{ false }}">
+              <p style="font-size:17px;line-height:1.7;color:#4C1E34;font-weight:700;margin:8px 0 16px;">{{ b.listIntro }}</p>
+            </sc-if>
+            <sc-if value="{{ b.hasList }}" hint-placeholder-val="{{ false }}">
+              <div style="margin:4px 0 24px;">
+                <sc-for list="{{ b.list }}" as="li" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-top:1px solid rgba(76,30,52,0.14);">
+                    <span style="flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#AB2232;margin-top:8px;"></span>
+                    <span style="font-size:16px;line-height:1.6;color:#4C1E34;">{{ li }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-for list="{{ b.tail }}" as="p" hint-placeholder-count="1">
+              <p style="font-size:17px;line-height:1.75;color:#4C1E34;margin:0 0 20px;">{{ p }}</p>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+
+    </sc-if>
+
+  </sc-for>
+
+  <!-- ===== ADVISER CTA BAND ===== -->
+  <section style="position:relative;background:#4C1E34;overflow:hidden;padding:88px 0;">
+    <div style="position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center;">
+      <div class="aw-anim aw-qmark" style="position:absolute;left:55%;top:50%;transform:translate(-50%,-50%);z-index:3;font-family:'Alfa Slab One',serif;font-size:420px;line-height:0.8;color:transparent;-webkit-text-stroke:2px rgba(247,235,217,0.7);mix-blend-mode:overlay;user-select:none;pointer-events:none;animation:awFloat 10s ease-in-out infinite;">?</div>
+      <div>
+        <div style="font-size:18px;color:#FEB18A;font-weight:700;margin-bottom:16px;">Need to speak to an adviser?</div>
+        <h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:58px;line-height:1.05;color:#F7EBD9;margin:0 0 36px;">Call us on <a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227557</a>.</h2>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+          <div class="aw-btn" style="display:inline-flex;align-items:center;justify-content:center;height:60px;padding:0 40px;border-radius:10px;background:#AB2232;color:#FEF9EC;font-weight:700;font-size:16px;cursor:pointer;">Contact Us</div>
+          <div style="display:inline-flex;align-items:center;gap:14px;color:#F7EBD9;font-weight:700;font-size:18px;cursor:pointer;">
+            <span class="aw-phone" style="width:54px;height:54px;border-radius:50%;background:rgba(247,235,247,0.1);background:rgba(247,235,217,0.1);border:1px solid rgba(247,235,217,0.32);display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
+            </span>
+            <a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227557</a>
+          </div>
+        </div>
+      </div>
+      <div class="aw-photo aw-cta-photo" style="position:relative;border-radius:20px;overflow:hidden;box-shadow:0 20px 44px rgba(0,0,0,0.28);">
+        <img src="brand/cta-people.webp" alt="Speak to an Audley adviser" style="display:block;width:100%;height:420px;object-fit:cover;" />
+      </div>
+    </div>
+  </section>
+
+  <div style="height:6px;background:linear-gradient(90deg,#CDDFDD 0%,#FEB18A 100%);"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="aw-footer" style="background:#4C1E34;color:#FEF9EC;padding:72px 0 40px;">
+    <div class="aw-footer-grid" style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 0.9fr 1.3fr 1.05fr;gap:48px;">
+      <div>
+        <div style="color:#FEF9EC;width:130px;margin-bottom:20px;">
+          <svg viewBox="0 0 148.802 98.231" style="width:100%;height:auto;display:block;" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fillRule="nonzero" transform="translate(61.31 67.171)" d="M 8.95 0.01 L 9.99 0.01 L 7.86 7.78 L 6.87 7.78 L 5.23 1.86 C 5.09 1.37 5.01 1.06 4.99 0.95 C 4.91 1.31 4.83 1.61 4.76 1.86 L 3.11 7.78 L 2.06 7.78 L 0 0.01 L 1.06 0.01 L 2.24 5.1 C 2.37 5.63 2.48 6.16 2.57 6.69 C 2.77 5.86 2.88 5.38 2.92 5.25 L 4.4 0 L 5.64 0 L 6.75 3.93 C 7.03 4.9 7.23 5.82 7.36 6.68 C 7.46 6.19 7.59 5.63 7.75 4.99 L 8.97 0 L 8.95 0.01 Z M 18.04 4.22 L 22.35 4.22 L 22.35 3.31 L 18.04 3.31 L 18.04 0.93 L 22.64 0.93 L 22.64 0.01 L 17.01 0.01 L 17.01 7.78 L 22.82 7.78 L 22.82 6.86 L 18.04 6.86 L 18.04 4.22 Z M 32.92 0.01 L 36.11 7.78 L 34.94 7.78 L 34.03 5.43 L 30.78 5.43 L 29.93 7.78 L 28.84 7.78 L 31.83 0.01 L 32.94 0.01 L 32.92 0.01 Z M 33.71 4.59 L 32.9 2.44 C 32.65 1.79 32.47 1.25 32.35 0.83 C 32.25 1.33 32.11 1.82 31.93 2.31 L 31.07 4.59 L 33.71 4.59 Z M 43.36 0.01 L 42.33 0.01 L 42.33 7.78 L 47.19 7.78 L 47.19 6.86 L 43.36 6.86 L 43.36 0.01 Z M 53.28 0.93 L 55.85 0.93 L 55.85 7.78 L 56.88 7.78 L 56.88 0.93 L 59.46 0.93 L 59.46 0.01 L 53.29 0.01 L 53.29 0.93 L 53.28 0.93 Z M 71.46 0.01 L 71.46 3.2 L 67.41 3.2 L 67.41 0.01 L 66.38 0.01 L 66.38 7.78 L 67.41 7.78 L 67.41 4.12 L 71.46 4.12 L 71.46 7.78 L 72.49 7.78 L 72.49 0.01 L 71.46 0.01 Z" /><path fillRule="nonzero" transform="translate(67.52 0)" d="M 3.26 22.571 C 11.38 3.841 21.05 3.021 22.63 3.021 C 22.75 3.021 22.83 3.021 22.85 3.021 L 22.93 3.021 L 23.02 3.021 L 23.04 3.021 C 31.92 3.021 41.12 13.741 41.21 13.841 C 41.28 13.921 44.12 17.331 48.49 22.551 L 52.4 22.551 C 47.12 16.251 43.58 12.011 43.5 11.911 C 43.09 11.431 33.34 0.061 23.08 0.021 C 21.69 -0.099 9.49 -0.419 0 22.551 L 3.26 22.551 L 3.26 22.571 Z" /><path fillRule="nonzero" transform="translate(50.408 44.321)" d="M 92.912 5.96 C 91.232 3.99 89.532 1.99 87.842 0 L 86.642 3.23 C 87.972 4.8 89.302 6.36 90.622 7.91 C 94.132 12.03 95.802 17.03 95.322 21.99 C 94.862 26.76 92.412 31.14 88.402 34.34 C 82.582 38.98 74.782 40.7 67.242 42.37 C 65.802 42.69 64.382 43 62.992 43.33 C 59.832 44.08 56.552 45.05 53.082 46.08 C 42.792 49.13 31.122 52.59 21.472 50 C 10.642 47.09 3.052 38.18 2.992 28.33 C 2.982 26.26 3.172 24.21 3.512 22.18 L 0.472 22.18 C 0.162 24.21 -0.018 26.26 0.002 28.34 C 0.062 39.53 8.572 49.63 20.702 52.89 C 23.372 53.61 26.142 53.91 28.962 53.91 C 37.242 53.91 45.992 51.31 53.942 48.95 C 57.372 47.93 60.612 46.97 63.692 46.24 C 65.062 45.91 66.472 45.6 67.892 45.29 C 75.772 43.55 83.911 41.76 90.271 36.68 C 94.911 32.97 97.772 27.86 98.302 22.27 C 98.852 16.49 96.932 10.7 92.902 5.96 L 92.912 5.96 Z" /><path fillRule="nonzero" transform="translate(0 25.361)" d="M 7.92 29.37 L 6.42 38.13 L 0 38.13 L 6.18 4.18 C 6.62 1.76 8.73 0 11.19 0 C 13.66 0 15.77 1.77 16.2 4.19 L 22.29 38.13 L 15.82 38.13 L 14.36 29.37 L 7.92 29.37 Z M 10.86 10.72 L 8.87 23.77 L 13.45 23.77 L 11.46 10.72 C 11.41 10.37 10.91 10.37 10.86 10.72 Z" /><path fillRule="nonzero" transform="translate(26.56 25.361)" d="M 9.74 38.61 C 7.03 38.61 4.73 37.73 2.84 35.97 C 0.95 34.21 0 32.07 0 29.56 L 0 0 L 6.04 0 L 6.04 29.5 C 6.04 30.41 6.39 31.18 7.08 31.82 C 7.78 32.46 8.61 32.78 9.58 32.78 C 10.55 32.78 11.4 32.46 12.08 31.82 C 12.76 31.18 13.1 30.41 13.1 29.5 L 13.1 0 L 19.54 0 L 19.54 29.56 C 19.54 32.11 18.58 34.26 16.67 36 C 14.75 37.74 12.44 38.61 9.73 38.61 L 9.74 38.61 Z" /><path fillRule="nonzero" transform="translate(51.58 25.361)" d="M 19.4 29.01 C 19.4 31.52 18.45 33.66 16.55 35.45 C 14.65 37.23 12.37 38.13 9.7 38.13 L 0 38.13 L 0 0 L 9.7 0 C 12.39 0 14.68 0.89 16.57 2.68 C 18.46 4.46 19.4 6.6 19.4 9.1 L 19.4 29.02 L 19.4 29.01 Z M 6.18 32.44 L 9.9 32.44 C 10.88 32.44 11.71 32.11 12.38 31.45 C 13.05 30.79 13.39 30.01 13.39 29.12 L 13.39 9.18 C 13.39 8.27 13.05 7.5 12.36 6.85 C 11.67 6.2 10.85 5.88 9.9 5.88 L 6.18 5.88 L 6.18 32.45 L 6.18 32.44 Z" /><path fillRule="nonzero" transform="translate(76.39 25.361)" d="M 16.84 38.13 L 0 38.13 L 0 0 L 6.17 0 L 6.17 32.42 L 16.83 32.42 L 16.83 38.13 L 16.84 38.13 Z" /><path fillRule="nonzero" transform="translate(97.45 25.361)" d="M 0 38.13 L 0 0 L 17.58 0 L 17.58 5.75 L 6.18 5.75 L 6.18 16.2 L 14.51 16.2 L 14.51 21.95 L 6.18 21.95 L 6.18 32.38 L 17.58 32.38 L 17.58 38.13 L 0 38.13 Z" /><path fillRule="nonzero" transform="translate(119.27 25.361)" d="M 8.26 22.16 L 0 0 L 6.78 0 L 11.37 13.69 L 15.92 0 L 22.74 0 L 14.43 22.16 L 14.43 38.13 L 8.26 38.13 L 8.26 22.16 Z" /></svg>
+        </div>
+        <p style="font-size:13px;line-height:1.6;color:#FEF9EC;opacity:0.75;margin:0;">A genuinely fresh, no nonsense approach to financial planning, pension planning, retirement planning and asset management.</p>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Useful Links</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px;opacity:0.9;">
+          <a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">About Us</a><a href="Service Pages.dc.html" class="aw-flink" style="text-decoration:none;">Services</a><a href="Financial Focus.dc.html" class="aw-flink" style="text-decoration:none;">Financial Focus</a><a href="News.dc.html" class="aw-flink" style="text-decoration:none;">News</a><a href="Client Stories.dc.html" class="aw-flink" style="text-decoration:none;">Client Stories</a><a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">Our Team</a><a href="Product Updates.dc.html" class="aw-flink" style="text-decoration:none;">Product Updates</a><a href="Downloads.dc.html" class="aw-flink" style="text-decoration:none;">Downloads</a><a href="Contact Us.dc.html" class="aw-flink" style="text-decoration:none;">Contact Us</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Contacts</div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">St Albans Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">Censeo House, 6 St Peter&rsquo;s Street, St Albans AL1 3LF</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227 557</a></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Edinburgh Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">EH20 Business Centre, 6 Dryden Road, Bilston Glen Ind Estate, Midlothian EH20 9LZ</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:01316549819" style="color:inherit;text-decoration:none;">0131 654 9819</a></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">London Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">1 Giltspur Street, London EC1A 9DD</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:02034404165" style="color:inherit;text-decoration:none;">020 3440 4165</a></div>
+          </div>
+          <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;padding-top:4px;border-top:1px solid rgba(247,235,217,0.12);padding-top:16px;"><span style="flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9993;</span><span>enquiries@audleywealth.com</span></div>
+          <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;"><span style="flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9719;</span><span>Mon&ndash;Fri 9:00&ndash;17:30</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Accreditations</div>
+        <div style="display:flex;gap:14px;">
+          <div style="width:77px;height:77px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="brand/badge-pfs.webp" alt="PFS" style="width:58px;height:58px;object-fit:contain;" /></div>
+          <div style="width:77px;height:77px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="brand/badge-ifp.webp" alt="IFP" style="width:58px;height:58px;object-fit:contain;" /></div>
+        </div>
+        <div style="font-weight:700;font-size:14px;margin:26px 0 12px;opacity:0.85;">Client reviews</div>
+        <a href="https://www.vouchedfor.co.uk/financial-advisor-ifa/dollis-hill/031629-alun-webster/reviews" target="_blank" rel="noopener noreferrer" class="aw-vf" style="display:block;text-decoration:none;color:#FEF9EC;background:rgba(247,235,217,0.06);border:1px solid rgba(247,235,217,0.18);border-radius:12px;padding:18px 16px;width:100%;overflow:hidden;">
+          <div id="vf-stars" class="vf-stars" style="min-height:26px;"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;opacity:0.8;">Read all client reviews
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div style="max-width:1320px;margin:48px auto 0;padding-top:28px;border-top:1px solid rgba(247,235,217,0.18);font-size:12px;line-height:1.7;color:#FEF9EC;opacity:0.7;">
+      Audley Wealth Ltd is authorised and regulated by the Financial Conduct Authority Firm Reference Number 955306. Registered Address: 4 Capricorn Centre, Cranes Farm Road, Basildon, Essex, SS14 3JJ, Registered in England &amp; Wales, Company No: 12406200
+      <br /><br />
+      &ldquo;The content of this is for information purposes only and should not be treated as advice. Independent personalised advice should be sought before taking action. Investing involves risk. The value of investments, and the income from them, may fall as well as rise. Investors may not get back the original amount invested.&rdquo;
+    </div>
+    <div style="max-width:1320px;margin:24px auto 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;opacity:0.85;">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;"><a href="Client Agreement.dc.html" class="aw-flink" style="text-decoration:none;">Client Agreement</a><a href="Privacy Centre.dc.html" class="aw-flink" style="text-decoration:none;">Privacy Centre</a><a href="Terms of Use.dc.html" class="aw-flink" style="text-decoration:none;">Terms of use | Privacy Environmental Policy</a></div>
+      <span>Copyright &copy; 2026</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { who: "alun" };
+
+  services() {
+    return {
+      pensions: {
+        title: "Pensions",
+        heroLead: "Audley can advise on every type of UK pension, reviewing any existing plans, and advising our clients how much money should be saved for their retirement",
+        statement: "Pension & Retirement Planning",
+        blocks: [
+          {
+            kind: "section",
+            sub: "Pension advice",
+            heading: "Pension advice",
+            side: "brand/side-pensions.webp",
+            paras: [
+              "Retirement planning is an exercise in thinking about the future, your objectives and all the different elements of a strategy to achieve them. Furthermore, there are some useful tax advantages to pensions that ensure they remain a key component in most retirement plans, in conjunction with several other elements.",
+              "You may already have one or more pensions, be wondering how to get started, or how best to use your accumulated funds. We can help with all of this and more.",
+            ],
+            more: [
+              "Starting work is often the trigger to begin contributing to your pension but every time you change job you may be faced with a decision \u2013 leave the pension where it is, or, move it to the new employer scheme. If it is a final salary scheme and you are moving to a money purchase scheme you could be giving up benefits in return for a cash value to be invested in the new scheme but what is a fair value for those benefits? Even if they are both money purchase schemes you need to consider the different levels of charges, features and investment options in each. This is a complicated area, which is why people often do nothing, collecting a range of different company pensions over the years, many of which they have lost track of or never review.",
+              "For self-employed clients, it is even more important to regularly review pension arrangements. There is no occupational pension scheme to fall back on and it is easy to get so involved in your business that you do not really take the time to manage your own finances effectively. There may well be serious financial planning and tax-saving opportunities that you are missing out on. Let us take a look at your existing arrangements to spot the opportunities and bring everything into line with your financial objectives.",
+              "We cover all aspects of retirement planning so whether you need to check how much income you will have in your retirement, review existing pensions, set up a new personal pension, or assess pension requirements for your employees, we can offer comprehensive advice",
+            ],
+            listIntro: "We provide advice on the following range of pensions:",
+            list: [
+              "Personal Pensions",
+              "Section 32s",
+              "Self-Invested Personal Pension Schemes (SIPPs)",
+              "Trustee Schemes",
+              "Drawdown Plans",
+              "Small Self-Administered Schemes (SSASs)",
+            ],
+            tail: [
+              "In 2015 there were huge changes to how people can access their pensions. This means that only those with a personal pension have the freedom to take their benefits flexibly. The rules and options on funding and taking benefits from pension plans continue to demand an advanced level of understanding. We can explain these rules and options clearly and succinctly to help decide the best route to follow. We also offer advice on Auto Enrolment requirements to ensure that your business is meeting the new regulations in the most efficient and productive manner.",
+            ],
+          },
+          { kind: "quote", quoteText: "\u201CIt\u2019s ok to change the plan.\u201D" },
+          {
+            kind: "section",
+            sub: "Retirement planning",
+            heading: "Planning your retirement",
+            paras: [
+              "When you\u2019re a 16-year-old, a school leaver or a university graduate, Retirement Planning seems to be one of those \u2018oh so serious\u2019 subjects that only have relevance to your parents and grandparents. It\u2019s never too late to start planning, but the earlier you do it the better. Audley offer expert advice on how to best plan for the longest holiday of your life. Ensure that when you earn that well-earned down time, your retirement lifestyle choices continue to afford you everything that you deserve and more.",
+              "There are now more ways to save for your retirement than ever before not just pensions, especially with the limits on how much you can save into a pension, many people need to consider alternatives to pensions to provide for their retirement such as other tax-efficient investments",
+            ],
+          },
+          { kind: "photo", img: "brand/band-pensions.webp" },
+          { kind: "quote", quoteText: "\u201CWho wants to work forever?\u201D" },
+          {
+            kind: "section",
+            sub: "Retirement planning",
+            heading: "Accumulation & decumulation",
+            paras: ["Retirement planning falls into two separate phases:"],
+            list: ["Accumulation", "Decumulation"],
+            tail: ["The first stage is accumulation, and then, after retirement (taking benefits) you enter the decumulation stage."],
+          },
+          { kind: "diagram", diagram: "accum" },
+          {
+            kind: "section",
+            sub: "Accumulation",
+            heading: "Building your provision",
+            listIntro: "Accumulation is the period of time where an individual builds their retirement provision through a combination of means:",
+            list: [
+              "State pension & partners State pension",
+              "Company pensions",
+              "Personal pensions",
+              "Future pension contributions (personal and employer)",
+              "Partners pensions",
+              "Savings",
+              "Investments",
+              "Property",
+            ],
+            tail: [
+              "Starting to save early is always a good idea as this ensures a long period of accumulation and investments will be held long-term to mitigate the risk with falls in value and help to increase the value of the benefits for your retirement provision.",
+              "How much you save will be governed by what is affordable, but Audley can help you understand what your retirement will look like. This will enable you to make decisions on when you can retire",
+            ],
+          },
+          {
+            kind: "section",
+            sub: "Decumulation",
+            heading: "Transitioning to retirement",
+            paras: [
+              "Decumulation is the time when you either stop working completely or reduce your working hours to transition to full retirement over a number of years. Some people simply access their entitlement to tax-free cash for any number of reasons (university fees, start a new business, fund an existing business, buy a property, repay debts) and defer any income until such time as they need it.",
+              "The time that you have to retire may be outside your control, due to health issues or inability to continue in employment so it is important that you have regular reviews as you approach retirement to ensure your plans remain on target for your desired retirement",
+              "As outlined above, some people will have several sources of income in retirement and it is important to understand how each of these interact to ensure that you receive your desired level of income in the most tax efficient way.",
+            ],
+          },
+          {
+            kind: "section",
+            sub: "Taking benefits",
+            heading: "Your options at retirement",
+            listIntro: "When drawing benefits from a personal pension there are a number of options:",
+            list: [
+              "Purchase an annuity: This provides you with a guaranteed income for life. You can choose the benefits you require: spouses pension (0%-100%), increasing or level income, guaranteed periods.",
+              "Move benefits to access an Uncrystallised Funds Pension Lump Sum: This allows you to take the entire fund as a lump sum. You will receive 25% tax free, and the rest will be taxed at your highest marginal rate of income tax.",
+              "Move to Flexible-Access Drawdown (FAD): Under the option of FAD you can choose to immediately take 25% tax-free cash from your plan. Then instead of buying an annuity with the remainder of the fund, the money remains invested and can continue to benefit from investment performance in a tax-efficient environment and you draw an income from the fund, or indeed choose not to.",
+              "Move to guaranteed Flexible-Access Drawdown (Third Way pension): These allow you to provide a guaranteed level of income for a set period of time normally 3 or 5 years. At the end of the term, you will receive a known fund value which you can then re-invest in line with your requirements. The level of income can be zero.",
+              "Move to a fixed term annuity: As the name implies, these are fixed term typically 3, 5 or 10 -year term. They offer a higher level of income than a lifetime annuity, which means that you will only have to use a proportion of your fund to meet your income requirements. However, at the end of the term the income will cease and you do not receive any return of capital.",
+              "Move to phased retirement: This option allows you to retire gradually taking a portion of your tax-free cash and/or income in line with your requirements. It can make the most tax-efficient use of your pension fund by having a pre-retirement fund from which you can take tax-free cash and a post-retirement fund from which you can draw a taxable income.",
+              "Move into a hybrid pension: This allows you to purchase an annuity with as much or as little of the fund as required and then utilise FAD for the residual fund, all under one plan, for ease of administration",
+              "A combination of the above: It is possible to utilise a combination of the above in line with your requirements.",
+            ],
+            tail: ["As you can see there are a number of options when you are looking to retire therefore it is important you obtain advice at this stage to ensure that your retirement is structured inline with your objectives."],
+          },
+        ],
+      },
+
+      investments: {
+        title: "Investments",
+        heroLead: "Audley have a wealth of experience advising on client portfolios. Clients benefit from our knowledge of investments, allowing them to make the most of their money.",
+        statement: "Wealth Management & Investment Advice",
+        blocks: [
+          {
+            kind: "section",
+            sub: "Planning",
+            heading: "Planning",
+            side: "brand/side-investments.webp",
+            paras: [
+              "We pride ourselves on being able to offer an investment proposition specific to your own goals and objectives.",
+              "To assist in ensuring our clients\u2019 attitude to investment risk is properly quantified, we use a psychometric risk profiler to form the basis of the subsequent discussion as to how funds should be invested. We also explain what clients can expect over the short and long term from different asset allocations.",
+            ],
+            more: [
+              "We all remember our first piggy bank, small change jar, our first savings account, the new bike, our first car, our annual holiday, our first home. We probably all had to dip into our hard-earned savings for the unexpected, our \u2018rainy day\u2019 fund. From as far back as we can each remember, saving money is a condition of our very development - it makes perfect sense that we ensure our finances support us as our lives develop and change.",
+            ],
+          },
+          { kind: "highlight",
+            heading: "Make the most of your money",
+            list: ["Cash Management", "National Savings", "Bank Accounts", "Cash Individual Savings Accounts (ISAs)"],
+          },
+          {
+            kind: "section",
+            sub: "Cash management",
+            heading: "Money for a rainy day",
+            paras: [
+              "We all like the security of having cash available to fall back on in an emergency (boiler breaks down, sudden illness, unemployment), which is why we suggest that clients retain an amount readily accessible on deposit equivalent to 3-6 months net income as a minimum.",
+              "Some clients prefer a higher level of cash, maybe because they are more risk averse or they have it earmarked for a future purchase. For those clients we offer advice on cash management services where by the money is spread amongst a number of bank accounts and National Savings in order to maximise the return, taking in to consideration requirements such as access, security and any ethical concerns",
+            ],
+          },
+          { kind: "diagram", diagram: "buffer" },
+          { kind: "photo", img: "brand/band-investments.webp" },
+          { kind: "diagram", diagram: "process" },
+          {
+            kind: "section",
+            sub: "Medium to long-term investing",
+            heading: "Medium to long-term investing",
+            listIntro: "",
+            list: [
+              "National Savings",
+              "Individual Savings Accounts",
+              "Collective funds (Unit Trusts, Exchanged Traded Funds, Open Ended Investment Companies, Investment Trusts)",
+              "Onshore Bonds",
+              "Offshore Bonds",
+            ],
+            tail: [
+              "We believe in the value of a sound strategy and a disciplined approach to investing. That\u2019s why we use a rigorous investment process to create tailored solutions that help grow, manage and preserve your wealth. We have a thorough discovery process to fully understand your objectives, wealth, experience and attitude to investment risk. We will analyse your financial situation, then discuss and recommend an investment strategy to help you achieve those goals in the appropriate timescales.",
+              "The understanding we gain in the first stage drives the asset allocation of your investments \u2013 that is choosing the type of assets and how they are spread geographically across the world. This diversification is the key step in reducing and aligning investment risk with your own risk profile.",
+              "We then select individual assets based on comprehensive research of the market and the different investments available. We may choose active or passive management, or a combination of both types of investments, depending on your needs.",
+              "Once you\u2019re invested, we provide regular reviews. As part of the reviews we will consider risk, asset allocation, individual asset selection, performance, and other aspects of your finances that might have an impact or cause us to recommend changes.",
+              "We are always available to answer any questions you may have between reviews.",
+            ],
+          },
+          {
+            kind: "section",
+            sub: "Tax planning",
+            heading: "Tax planning",
+            paras: [
+              "One of the overriding considerations is to minimise the tax you pay on your investments. You have worked hard for your money and you want it to work hard for you, not to pay any unnecessary tax.",
+              "We advise on a range of tax-beneficial investments. ISAs, pensions, Venture Capital Trusts (VCTs) and Enterprise Investment Schemes (EISs) continue to form a vital part of our clients\u2019 tax and investment planning strategies.",
+              "We have the expertise and resources to help identify how these investments can assist clients and research which options will best suit their needs. However, we also know that the main reason for investing shouldn\u2019t be the tax benefit \u2013 the investment also has to be suitable for you.",
+            ],
+          },
+          {
+            kind: "crosslink",
+            sub: "Long-term investing",
+            heading: "Pension Services",
+            paras: ["When thinking long term, typically we are considering retirement either during the accumulation or the deaccumulation phase."],
+            linkLabel: "Click Here",
+            linkTo: "pensions",
+          },
+        ],
+      },
+    };
+  }
+
+  decorate(s) {
+    return {
+      title: s.title,
+      heroLead: s.heroLead,
+      statement: s.statement,
+      blocks: s.blocks.map((b) => {
+        const kind = b.kind || "section";
+        return {
+          kind,
+          isSection: kind === "section",
+          isQuote: kind === "quote",
+          isHighlight: kind === "highlight",
+          isCross: kind === "crosslink",
+          isPhoto: kind === "photo",
+          isDiagram: kind === "diagram",
+          diagAccum: b.diagram === "accum",
+          diagProcess: b.diagram === "process",
+          diagBuffer: b.diagram === "buffer",
+          img: b.img || "",
+          side: b.side || "",
+          hasSide: !!b.side,
+          noSide: !b.side,
+          more: b.more || [],
+          onPensions: this.state.active === "pensions",
+          onInvestments: this.state.active === "investments",
+          sub: b.sub || "",
+          heading: b.heading || "",
+          quoteText: b.quoteText || "",
+          paras: b.paras || [],
+          tail: b.tail || [],
+          list: b.list || [],
+          listIntro: b.listIntro || "",
+          linkLabel: b.linkLabel || "",
+          hasSub: !!b.sub,
+          hasList: !!(b.list && b.list.length),
+          hasListIntro: !!b.listIntro,
+          onLink: b.linkTo ? () => this.setState({ active: b.linkTo }) : () => {},
+        };
+      }),
+    };
+  }
+
+  componentDidMount() {
+    const h = (window.location.hash || "").replace("#", "").toLowerCase();
+    if (["alun", "jenny", "kerrie", "jill"].indexOf(h) !== -1 && h !== this.state.who) {
+      this.setState({ who: h });
+    }
+    this._onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => { this._raf = 0; this._check(); });
+    };
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    window.addEventListener("resize", this._onScroll, { passive: true });
+    this._startPoll();
+    this._check();
+    this._loadVouchedFor();
+  }
+  _loadVouchedFor() {
+    const el = document.getElementById("vf-stars");
+    if (!el || el.dataset.loaded) return;
+    el.dataset.loaded = "1";
+    const url = "https://api.vouchedfor.co.uk/v2/public/professional/31629/widget?type=stars_centre_transparent_light&version=vf2023";
+    fetch(url)
+      .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+      .then((html) => { el.innerHTML = html; })
+      .catch(() => {
+        // graceful fallback: 5 star glyphs (label stays "Verified reviews on VouchedFor")
+        el.innerHTML = '<span style="color:#FEB18A;font-size:18px;letter-spacing:2px;">\u2605\u2605\u2605\u2605\u2605</span>';
+      });
+  }
+  componentDidUpdate() {
+    // service switch swaps in fresh DOM (rules/cards start hidden via CSS); reveal what's in view
+    this._startPoll();
+    requestAnimationFrame(() => this._check());
+  }
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this._onScroll);
+    window.removeEventListener("resize", this._onScroll);
+    if (this._poll) clearInterval(this._poll);
+  }
+  _startPoll() {
+    if (this._poll) clearInterval(this._poll);
+    this._poll = setInterval(() => this._check(), 200);
+  }
+  _reduced() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+  _check() {
+    const root = document.querySelector("[data-aw-root]");
+    if (!root) return;
+    if (this._reduced()) {
+      root.querySelectorAll(".aw-rule").forEach((e) => e.classList.add("drawn"));
+      root.querySelectorAll(".aw-card").forEach((e) => e.classList.add("aw-shown"));
+      if (this._poll) { clearInterval(this._poll); this._poll = 0; }
+      return;
+    }
+    const trigger = window.innerHeight * 0.92;
+    // heading rules draw in
+    root.querySelectorAll(".aw-rule:not(.drawn)").forEach((e) => {
+      if (e.getBoundingClientRect().top < trigger) e.classList.add("drawn");
+    });
+    // diagram cards stagger in, grouped by their section
+    root.querySelectorAll("section").forEach((sec) => {
+      const cards = [].slice.call(sec.querySelectorAll(".aw-card:not(.entered)"));
+      if (!cards.length) return;
+      if (sec.getBoundingClientRect().top < trigger) {
+        cards.forEach((c, i) => {
+          c.style.animationDelay = (0.05 + (i % 4) * 0.1) + "s";
+          c.classList.add("entered");
+          const done = () => { c.classList.add("aw-shown"); c.style.animation = "none"; };
+          c.addEventListener("animationend", done, { once: true });
+          setTimeout(done, 1600);
+        });
+      }
+    });
+    const pending = root.querySelectorAll(".aw-rule:not(.drawn), .aw-card:not(.entered)").length;
+    if (!pending && this._poll) { clearInterval(this._poll); this._poll = 0; }
+  }
+
+  renderVals() {
+    const w = this.state.who;
+    return {
+      svc: { blocks: [] },
+      alunOn: w === "alun", alunOff: w !== "alun",
+      jennyOn: w === "jenny", jennyOff: w !== "jenny",
+      kerrieOn: w === "kerrie", kerrieOff: w !== "kerrie",
+      jillOn: w === "jill", jillOff: w !== "jill",
+      goAlun: () => this.setState({ who: "alun" }),
+      goJenny: () => this.setState({ who: "jenny" }),
+      goKerrie: () => this.setState({ who: "kerrie" }),
+      goJill: () => this.setState({ who: "jill" }),
+      goPensions: () => {},
+      goInvestments: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>

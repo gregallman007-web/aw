@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Chivo:ital,wght@0,300;0,400;0,700;0,900&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #AB2232; color: #FEF9EC; }
+  .aw-menu .aw-drop { opacity: 0; visibility: hidden; transform: translate(-50%, 6px); transition: opacity .16s ease, transform .16s ease, visibility .16s; }
+  .aw-menu:hover .aw-drop { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  @keyframes awMorph { 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-16px,10px) scale(1.05); } }
+  .aw-blob-noise { position:absolute; inset:0; border-radius:inherit; mix-blend-mode:overlay; opacity:0.5; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  @keyframes awFloat { 0%,100%{ transform:translate(-50%,-50%); } 50%{ transform:translate(-50%,-54%); } }
+  @media (prefers-reduced-motion: reduce){ .aw-anim{ animation:none !important; } }
+  [data-aw-root] .aw-rule { transform: scaleX(0); transform-origin:left center; transition: transform .8s cubic-bezier(.22,.61,.36,1); }
+  [data-aw-root] .aw-rule.drawn { transform: scaleX(1); }
+  [data-aw-root] .aw-card { opacity:0; }
+  [data-aw-root] .aw-card.entered { animation: awCardIn .6s cubic-bezier(.22,.61,.36,1) both; }
+  [data-aw-root] .aw-card.aw-shown { opacity:1 !important; animation:none !important; }
+  @media (prefers-reduced-motion: reduce){ [data-aw-root] .aw-rule,[data-aw-root] .aw-card { transform:none !important; opacity:1 !important; transition:none !important; animation:none !important; } }
+  .aw-card { transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease; }
+  .aw-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(12,12,13,0.16); }
+  .aw-pop { transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+  .aw-card:hover .aw-pop { transform: scale(1.1); }
+  .aw-btn { transition: transform .2s ease, box-shadow .2s ease, filter .2s ease; }
+  .aw-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(171,34,50,0.32); filter: brightness(1.05); }
+  .aw-btn:active { transform: translateY(0); box-shadow: none; }
+  .aw-photo img { transition: filter .45s ease; }
+  .aw-photo:hover img { filter: saturate(1.08) brightness(1.04) contrast(1.02); }
+  .aw-navlink { transition: color .18s ease; }
+  .aw-navlink:hover { color: #AB2232; }
+  .aw-burger { display:none; }
+  @media (max-width:980px){
+    .aw-header-inner { position:relative; flex-wrap:nowrap; }
+    .aw-burger { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; margin-left:auto; flex:0 0 auto; border-radius:10px; border:1px solid rgba(76,30,52,0.18); background:#FEF9EC; color:#4C1E34; cursor:pointer; }
+    .aw-burger svg line { transition: transform .2s ease, opacity .2s ease; transform-origin:center; }
+    .aw-nav-cb:checked ~ .aw-burger .awb1 { transform: translateY(6px) rotate(45deg); }
+    .aw-nav-cb:checked ~ .aw-burger .awb2 { opacity:0; }
+    .aw-nav-cb:checked ~ .aw-burger .awb3 { transform: translateY(-6px) rotate(-45deg); }
+    .aw-nav-wrap { position:absolute; top:100%; left:0; right:0; flex-direction:column !important; align-items:stretch !important; gap:4px !important; flex:none !important; background:#F7EBD9; border-bottom:1px solid rgba(76,30,52,0.12); box-shadow:0 24px 34px rgba(12,12,13,0.14); padding:12px 24px 22px; display:none; max-height:calc(100vh - 72px); overflow-y:auto; display:none !important; }
+    .aw-nav-cb:checked ~ .aw-nav-wrap { display:flex !important; }
+    .aw-nav-wrap > nav { flex-direction:column !important; align-items:stretch !important; gap:0 !important; flex:none !important; width:100%; font-size:17px !important; }
+    .aw-nav-wrap > nav > a { padding:13px 4px !important; border-bottom:1px solid rgba(76,30,52,0.08); }
+    .aw-nav-wrap > nav > .aw-menu { padding:8px 4px !important; border-bottom:1px solid rgba(76,30,52,0.08); }
+    .aw-nav-wrap .aw-menu > span:first-child { width:100%; justify-content:space-between; padding:5px 0; }
+    .aw-nav-wrap .aw-drop { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; border:0 !important; background:transparent !important; padding:2px 0 4px 14px !important; min-width:0 !important; }
+    .aw-nav-wrap .aw-drop a { padding:9px 12px !important; }
+    .aw-nav-wrap > div { margin-top:10px; }
+    .aw-nav-wrap > div.aw-btn { justify-content:center; }
+  }
+  .aw-flink { transition: color .18s ease, opacity .18s ease; cursor: pointer; color: inherit; }
+  .aw-flink:hover { color: #FEB18A; opacity: 1; }
+  .aw-footer > div:not(.aw-footer-grid){ padding-left:40px; padding-right:40px; }
+  @media (max-width:980px){ .aw-footer-grid > div{ min-width:0; } }
+  @media (max-width:760px){
+    [style*="minmax(320px, 1fr)"],[style*="minmax(300px, 1fr)"],[style*="minmax(280px, 1fr)"],[style*="minmax(340px,1fr)"],[style*="minmax(340px, 1fr)"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:560px){
+    [style*="max-width: 1320px"]{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  html { scrollbar-gutter: stable both-edges; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  /* card-pad-mobile */
+  @media (max-width:560px){
+    [style*="padding: 46px 42px"],
+    [style*="padding: 44px 48px"],
+    [style*="padding: 40px 44px"],
+    [style*="padding: 52px 52px"],
+    [style*="padding: 48px 56px"],
+    [style*="padding: 48px 52px"],
+    [style*="padding: 42px 44px"],
+    [style*="padding: 30px 34px"],
+    [style*="padding: 34px 36px"]{ padding-left:24px !important; padding-right:24px !important; }
+  }
+  input, textarea, select, button { box-sizing: border-box; max-width: 100%; }
+  /* mobile-safety-v2 */
+  @media (max-width:760px){ .aw-heroblob{ width:300px !important; height:240px !important; right:-90px !important; top:-50px !important; } }
+  @media (max-width:760px){
+    [style*="grid-template-columns: repeat(2, 1fr)"],
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns: 1fr auto 1fr"],
+    [style*="grid-template-columns: auto 1fr"],
+    [style*="grid-template-columns: 1fr auto"],
+    [style*="grid-template-columns: 2fr 1fr"],
+    [style*="grid-template-columns: 1fr 2fr"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:640px){
+    [style*="font-size: 92px"]{ font-size:40px !important; }
+    [style*="font-size: 88px"]{ font-size:39px !important; }
+    [style*="font-size: 84px"]{ font-size:38px !important; }
+    [style*="font-size: 80px"]{ font-size:37px !important; }
+    [style*="font-size: 76px"]{ font-size:36px !important; }
+    [style*="font-size: 72px"]{ font-size:35px !important; }
+    [style*="font-size: 68px"]{ font-size:34px !important; }
+    [style*="font-size: 64px"]{ font-size:33px !important; }
+    [style*="font-size: 60px"]{ font-size:32px !important; }
+    [style*="font-size: 46px"]{ font-size:29px !important; }
+    [style*="font-size: 44px"]{ font-size:28px !important; }
+    [style*="font-size: 42px"]{ font-size:27px !important; }
+  }
+  @media (max-width:560px){
+    [style*="padding: 88px 40px"],
+    [style*="padding: 80px 40px"],
+    [style*="padding: 76px 40px"],
+    [style*="padding: 72px 40px"],
+    [style*="padding: 64px 40px"]{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  .aw-vf { min-width: 0; }
+  .aw-vf .vf-stars { flex: 0 1 auto; min-width: 0; max-width: 100%; overflow: hidden; }
+  @media (max-width:560px){
+    .aw-vf { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  }
+  @media (max-width:980px){
+    .aw-footer-grid{ grid-template-columns:1fr 1fr !important; gap:36px !important; }
+    .aw-footer{ padding-top:56px !important; }
+  }
+  @media (max-width:600px){
+    .aw-footer-grid{ grid-template-columns:1fr !important; gap:34px !important; }
+    .aw-footer > div{ padding-left:22px !important; padding-right:22px !important; }
+  }
+  @media (max-width:900px){
+    [style*="grid-template-columns: repeat(4, 1fr)"]{ grid-template-columns:repeat(2,1fr) !important; }
+    [style*="grid-template-columns: 1.05fr 0.95fr"],
+    [style*="grid-template-columns: 1.15fr 0.85fr"],
+    [style*="grid-template-columns: 1.04fr 0.96fr"],
+    [style*="grid-template-columns: 1fr 1fr"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:560px){
+    [style*="grid-template-columns: repeat(4, 1fr)"]{ grid-template-columns:1fr !important; }
+  }
+  @media (max-width:640px){
+    [style*="font-size: 58px"]{ font-size:34px !important; }
+    [style*="font-size: 56px"]{ font-size:33px !important; }
+    [style*="font-size: 54px"]{ font-size:32px !important; }
+    [style*="font-size: 52px"]{ font-size:31px !important; }
+    [style*="font-size: 50px"]{ font-size:30px !important; }
+    [style*="font-size: 48px"]{ font-size:30px !important; }
+    [style*="font-size: 46px"]{ font-size:29px !important; }
+    [style*="font-size: 42px"]{ font-size:28px !important; }
+  }
+  .aw-phone { transition: background .2s ease, border-color .2s ease; }
+  .aw-phone:hover { background: rgba(247,235,217,0.22); border-color: rgba(247,235,217,0.6); }
+  .aw-vf { transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+  .aw-vf:hover { background: rgba(247,235,217,0.12); border-color: rgba(247,235,217,0.4); transform: translateY(-2px); }
+  .vf-stars img { max-width: 100%; height: auto; }
+  .vf-stars > * { max-width: 100% !important; margin: 0 !important; }
+  .vf-stars .vf-ctl { min-width: 0 !important; }
+  .vf-stars .vf-ctl__content { padding: 0 !important; align-items: flex-start !important; }
+  @media (prefers-reduced-motion: reduce){ .aw-card,.aw-pop,.aw-btn,.aw-photo img{ transition:none !important; } .aw-card:hover,.aw-btn:hover{ transform:none !important; } .aw-card:hover .aw-pop{ transform:none !important; } .aw-photo:hover img{ filter:none !important; } }
+  @keyframes awCardIn { from{ opacity:0; transform:translateY(20px) scale(.96); } to{ opacity:1; transform:none; } }
+  .aw-tab { transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease; }
+  .aw-tab:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(76,30,52,0.16); }
+  .aw-tab-ghost:hover { border-color:#AB2232; color:#AB2232; }
+  .aw-tab-solid:hover { filter: brightness(1.07); }
+  @media (prefers-reduced-motion: reduce){ .aw-tab{ transition:none !important; } .aw-tab:hover{ transform:none !important; } }
+  .aw-dl-arrow { transition: background .2s ease, color .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .aw-dl:hover .aw-dl-arrow { background:#AB2232; color:#FEF9EC; transform: translateY(-2px); }
+  .aw-modal-close { transition: background .2s ease, border-color .2s ease; }
+  .aw-modal-close:hover { background: rgba(247,235,217,0.16); border-color: rgba(247,235,217,0.6); }
+  @keyframes awModalIn { from { opacity:0; transform: translateY(16px) scale(.97); } to { opacity:1; transform:none; } }
+  @keyframes awFadeIn { from { opacity:0; } to { opacity:1; } }
+</style>
+</helmet>
+<div data-aw-root style="background:#F7EBD9;font-family:Chivo,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#4C1E34;width:100%;overflow-x:hidden;">
+
+  <!-- ===== HEADER ===== -->
+  <header style="position:sticky;top:0;z-index:50;background:rgba(247,235,217,0.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(76,30,52,0.1);">
+    <div class="aw-header-inner" style="max-width:1320px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;gap:32px;">
+      <div style="color:#4C1E34;width:88px;flex:0 0 auto;">
+        <svg viewBox="0 0 148.802 98.231" style="width:100%;height:auto;display:block;" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fillRule="nonzero" transform="translate(61.31 67.171)" d="M 8.95 0.01 L 9.99 0.01 L 7.86 7.78 L 6.87 7.78 L 5.23 1.86 C 5.09 1.37 5.01 1.06 4.99 0.95 C 4.91 1.31 4.83 1.61 4.76 1.86 L 3.11 7.78 L 2.06 7.78 L 0 0.01 L 1.06 0.01 L 2.24 5.1 C 2.37 5.63 2.48 6.16 2.57 6.69 C 2.77 5.86 2.88 5.38 2.92 5.25 L 4.4 0 L 5.64 0 L 6.75 3.93 C 7.03 4.9 7.23 5.82 7.36 6.68 C 7.46 6.19 7.59 5.63 7.75 4.99 L 8.97 0 L 8.95 0.01 Z M 18.04 4.22 L 22.35 4.22 L 22.35 3.31 L 18.04 3.31 L 18.04 0.93 L 22.64 0.93 L 22.64 0.01 L 17.01 0.01 L 17.01 7.78 L 22.82 7.78 L 22.82 6.86 L 18.04 6.86 L 18.04 4.22 Z M 32.92 0.01 L 36.11 7.78 L 34.94 7.78 L 34.03 5.43 L 30.78 5.43 L 29.93 7.78 L 28.84 7.78 L 31.83 0.01 L 32.94 0.01 L 32.92 0.01 Z M 33.71 4.59 L 32.9 2.44 C 32.65 1.79 32.47 1.25 32.35 0.83 C 32.25 1.33 32.11 1.82 31.93 2.31 L 31.07 4.59 L 33.71 4.59 Z M 43.36 0.01 L 42.33 0.01 L 42.33 7.78 L 47.19 7.78 L 47.19 6.86 L 43.36 6.86 L 43.36 0.01 Z M 53.28 0.93 L 55.85 0.93 L 55.85 7.78 L 56.88 7.78 L 56.88 0.93 L 59.46 0.93 L 59.46 0.01 L 53.29 0.01 L 53.29 0.93 L 53.28 0.93 Z M 71.46 0.01 L 71.46 3.2 L 67.41 3.2 L 67.41 0.01 L 66.38 0.01 L 66.38 7.78 L 67.41 7.78 L 67.41 4.12 L 71.46 4.12 L 71.46 7.78 L 72.49 7.78 L 72.49 0.01 L 71.46 0.01 Z" /><path fillRule="nonzero" transform="translate(67.52 0)" d="M 3.26 22.571 C 11.38 3.841 21.05 3.021 22.63 3.021 C 22.75 3.021 22.83 3.021 22.85 3.021 L 22.93 3.021 L 23.02 3.021 L 23.04 3.021 C 31.92 3.021 41.12 13.741 41.21 13.841 C 41.28 13.921 44.12 17.331 48.49 22.551 L 52.4 22.551 C 47.12 16.251 43.58 12.011 43.5 11.911 C 43.09 11.431 33.34 0.061 23.08 0.021 C 21.69 -0.099 9.49 -0.419 0 22.551 L 3.26 22.551 L 3.26 22.571 Z" /><path fillRule="nonzero" transform="translate(50.408 44.321)" d="M 92.912 5.96 C 91.232 3.99 89.532 1.99 87.842 0 L 86.642 3.23 C 87.972 4.8 89.302 6.36 90.622 7.91 C 94.132 12.03 95.802 17.03 95.322 21.99 C 94.862 26.76 92.412 31.14 88.402 34.34 C 82.582 38.98 74.782 40.7 67.242 42.37 C 65.802 42.69 64.382 43 62.992 43.33 C 59.832 44.08 56.552 45.05 53.082 46.08 C 42.792 49.13 31.122 52.59 21.472 50 C 10.642 47.09 3.052 38.18 2.992 28.33 C 2.982 26.26 3.172 24.21 3.512 22.18 L 0.472 22.18 C 0.162 24.21 -0.018 26.26 0.002 28.34 C 0.062 39.53 8.572 49.63 20.702 52.89 C 23.372 53.61 26.142 53.91 28.962 53.91 C 37.242 53.91 45.992 51.31 53.942 48.95 C 57.372 47.93 60.612 46.97 63.692 46.24 C 65.062 45.91 66.472 45.6 67.892 45.29 C 75.772 43.55 83.911 41.76 90.271 36.68 C 94.911 32.97 97.772 27.86 98.302 22.27 C 98.852 16.49 96.932 10.7 92.902 5.96 L 92.912 5.96 Z" /><path fillRule="nonzero" transform="translate(0 25.361)" d="M 7.92 29.37 L 6.42 38.13 L 0 38.13 L 6.18 4.18 C 6.62 1.76 8.73 0 11.19 0 C 13.66 0 15.77 1.77 16.2 4.19 L 22.29 38.13 L 15.82 38.13 L 14.36 29.37 L 7.92 29.37 Z M 10.86 10.72 L 8.87 23.77 L 13.45 23.77 L 11.46 10.72 C 11.41 10.37 10.91 10.37 10.86 10.72 Z" /><path fillRule="nonzero" transform="translate(26.56 25.361)" d="M 9.74 38.61 C 7.03 38.61 4.73 37.73 2.84 35.97 C 0.95 34.21 0 32.07 0 29.56 L 0 0 L 6.04 0 L 6.04 29.5 C 6.04 30.41 6.39 31.18 7.08 31.82 C 7.78 32.46 8.61 32.78 9.58 32.78 C 10.55 32.78 11.4 32.46 12.08 31.82 C 12.76 31.18 13.1 30.41 13.1 29.5 L 13.1 0 L 19.54 0 L 19.54 29.56 C 19.54 32.11 18.58 34.26 16.67 36 C 14.75 37.74 12.44 38.61 9.73 38.61 L 9.74 38.61 Z" /><path fillRule="nonzero" transform="translate(51.58 25.361)" d="M 19.4 29.01 C 19.4 31.52 18.45 33.66 16.55 35.45 C 14.65 37.23 12.37 38.13 9.7 38.13 L 0 38.13 L 0 0 L 9.7 0 C 12.39 0 14.68 0.89 16.57 2.68 C 18.46 4.46 19.4 6.6 19.4 9.1 L 19.4 29.02 L 19.4 29.01 Z M 6.18 32.44 L 9.9 32.44 C 10.88 32.44 11.71 32.11 12.38 31.45 C 13.05 30.79 13.39 30.01 13.39 29.12 L 13.39 9.18 C 13.39 8.27 13.05 7.5 12.36 6.85 C 11.67 6.2 10.85 5.88 9.9 5.88 L 6.18 5.88 L 6.18 32.45 L 6.18 32.44 Z" /><path fillRule="nonzero" transform="translate(76.39 25.361)" d="M 16.84 38.13 L 0 38.13 L 0 0 L 6.17 0 L 6.17 32.42 L 16.83 32.42 L 16.83 38.13 L 16.84 38.13 Z" /><path fillRule="nonzero" transform="translate(97.45 25.361)" d="M 0 38.13 L 0 0 L 17.58 0 L 17.58 5.75 L 6.18 5.75 L 6.18 16.2 L 14.51 16.2 L 14.51 21.95 L 6.18 21.95 L 6.18 32.38 L 17.58 32.38 L 17.58 38.13 L 0 38.13 Z" /><path fillRule="nonzero" transform="translate(119.27 25.361)" d="M 8.26 22.16 L 0 0 L 6.78 0 L 11.37 13.69 L 15.92 0 L 22.74 0 L 14.43 22.16 L 14.43 38.13 L 8.26 38.13 L 8.26 22.16 Z" /></svg>
+      </div>
+      <input type="checkbox" id="awNavCb" class="aw-nav-cb" style="display:none;" /><label for="awNavCb" class="aw-burger" aria-label="Toggle menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line class="awb1" x1="3" y1="6" x2="21" y2="6"></line><line class="awb2" x1="3" y1="12" x2="21" y2="12"></line><line class="awb3" x1="3" y1="18" x2="21" y2="18"></line></svg></label><div class="aw-nav-wrap" style="display:flex;align-items:center;gap:32px;flex:1;"><nav style="display:flex;gap:26px;font-size:15px;color:#4C1E34;flex:1;align-items:center;">
+        <a href="Homepage.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Home</a>
+        <a href="About Us.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">About Us</a>
+        <a href="Client Stories.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Client Stories</a>
+        <div class="aw-menu" style="position:relative;cursor:pointer;padding:6px 0;">
+          <span style="color:#4C1E34;display:inline-flex;align-items:center;gap:6px;">Services <span style="font-size:9px;line-height:1;">&#9660;</span></span>
+          <div class="aw-drop" style="position:absolute;top:100%;left:50%;min-width:200px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:12px;box-shadow:0 14px 34px rgba(12,12,13,0.14);padding:8px;z-index:60;">
+            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Pensions</a>
+            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Investments</a>
+          </div>
+        </div>
+        <a href="Financial Focus.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Financial Focus</a>
+        <a href="News.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">News</a>
+        <a href="Contact Us.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Contact Us</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:8px;flex:0 0 auto;">
+        <span style="width:30px;height:30px;border-radius:50%;background:#4C1E34;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:14px;">&#9742;</span>
+        <a href="tel:01727227557" style="font-weight:700;font-size:15px;color:#212832;text-decoration:none;">01727 227557</a>
+      </div>
+      <div class="aw-btn" style="display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 24px;border-radius:10px;background:#AB2232;color:#FEF9EC;font-weight:700;font-size:15px;flex:0 0 auto;cursor:pointer;">Login</div></div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <div style="position:relative;background:#4C1E34;overflow:hidden;">
+    <div class="aw-anim aw-heroblob" style="position:absolute;right:-120px;top:-70px;width:560px;height:440px;border-radius:48% 52% 56% 44%/52% 48% 52% 48%;background:linear-gradient(67.445deg,#CDDFDD 36.59%,#FEB18A 111.98%);opacity:0.26;overflow:hidden;filter:blur(1px);will-change:transform;z-index:0;animation:awMorph 22s ease-in-out infinite;"><div class="aw-blob-noise"></div></div>
+  <section style="position:relative;z-index:1;">
+    <div style="position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:64px 40px 58px;">
+      <div style="font-size:14px;color:#F7EBD9;margin-bottom:24px;"><a href="Homepage.dc.html" class="aw-flink" style="opacity:0.55;color:#F7EBD9;text-decoration:none;">Home</a><span style="opacity:0.35;margin:0 8px;">/</span><span style="color:#FEB18A;font-weight:700;">Client Agreement</span></div>
+      <h1 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:76px;line-height:1;margin:0;color:#F7EBD9;">Client Agreement</h1>
+      <p style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:24px;line-height:1.3;color:#CDDFDD;max-width:820px;margin:22px 0 0;">The basis on which we conduct business with you and on your behalf.</p>
+    </div>
+  </section>
+  </div>
+
+    <!-- ===== CLIENT AGREEMENT ===== -->
+  <section style="position:relative;z-index:1;padding:56px 0 90px;">
+    <div style="max-width:920px;margin:0 auto;padding:0 40px;">
+
+      <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:28px 32px;margin-bottom:8px;">
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin:0 0 8px;">This agreement is made between:</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;margin:0 0 14px;">Audley Wealth Limited</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin:0 0 8px;">And:</p>
+        <p style="margin:0 0 18px;"><span style="display:inline-block;min-width:260px;border-bottom:1px dotted #4C1E34;opacity:0.5;">&nbsp;</span></p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin:0 0 8px;">The correspondence address is:</p>
+        <p style="margin:0;"><span style="display:inline-block;min-width:260px;border-bottom:1px dotted #4C1E34;opacity:0.5;">&nbsp;</span></p>
+      </div>
+
+      <div style="margin-top:32px;">
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">THIS DOCUMENT SETS OUT THE BASIS ON WHICH WE WILL CONDUCT BUSINESS WITH YOU AND ON YOUR BEHALF.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">IT IS AN IMPORTANT DOCUMENT AND WE WOULD ASK YOU TO READ IT CAREFULLY AND IF YOU ARE UNSURE OF ANY OF ITS TERMS PLEASE ASK.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">The terms of this Client Agreement come into force immediately on acceptance (implied or actual) of its terms by you and will remain in force until cancelled by either us or you, or replaced by a later version.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Audley Wealth Ltd is authorised and regulated by the Financial Conduct Authority (FCA) under Firm Reference Number 955306.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">You can check this on the Financial Services Register by visiting <a href="https://register.fca.org.uk/" target="_blank" rel="noopener noreferrer" style="color:#AB2232;font-weight:700;">https://register.fca.org.uk/</a> or by contacting the FCA at 12 Endeavour Square, London E20 1JN or telephone 0800 111 6768 (freephone).</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">The Range of Our Advice and Financial Planning Objectives</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Your adviser is independent and acts on your behalf as your agent. Your Adviser is therefore able to provide unbiased unrestricted advice on retail investment products based on a comprehensive and fair analysis of the market. We will consider a sufficiently wide range of financial instruments available on the market to ensure that your objectives can be met in a suitable way.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We are permitted to give advice on retail investments, protection and arrange transactions in these products. For retail investment products, this will include not just packaged products, but also structured products, all investment trusts and any other investments that offers exposure to underlying assets, but in a packaged form which modifies that exposure compared with direct holding in the financial asset.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">In order to provide you with personal financial advice and recommendations suitable for your particular circumstances and in order to act in your best interests, we will undertake a &lsquo;fact find&rsquo; to gather the appropriate information to assess your needs. We will then be able to set out clearly your financial planning objectives based on your stated objectives, acceptable level of risk and any restrictions you wish to place on the type of policies you are willing to consider. Details of your stated objectives will be set out in a Suitability Report we will issue to you to confirm our recommendation. Unless confirmed in writing, to the contrary, we will assume that you do not wish to place any restrictions on the advice we give you.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You hereby acknowledge that in the event of the firm assisting you in the completion of any investment or insurance application or policy proposal forms that you will in any event continue to bear full responsibility for the accuracy and completeness of the information entered on such forms. Therefore, you understand that inclusion of incorrect information or omission of any material facts may result in the insurance, investment or policy to which the application or proposal relates to being adversely adjusted, made void and/or any claim(s) made against it being refused. The advice we give you will be based on the information you have given us and your stated investment objectives including the degree of risk you will accept. It is your responsibility to advise us on any changes.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We will forward to you all documents showing ownership of your investments/contracts as soon as practicable after we receive them. All such documents may be sent by post and this would be at your risk.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We will outline from the outset whether our advice will cover your entire financial planning needs or focus on specific areas considering any restriction you place on our advice.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We require our clients to give us instructions in writing, or we may confirm our understanding in writing (by post or by email) in order to avoid possible disputes. This will usually be in the form of a proposal or application form. We will, however, accept oral instructions in certain instances provided they are subsequently confirmed in writing.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Our Ethics Policy</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We are committed to providing the highest standard of financial advice and service possible. The interest of our clients is paramount to us and to achieve this we have designed our systems and procedures to place you at the heart of our business. In doing so, we will:</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>be open, honest and transparent in the way we deal with you.</li><li>not place our interests above yours.</li><li>communicate clearly, promptly and without jargon.</li><li>seek your views and perception of our dealings with you to ensure it meets your expectations or to identify any improvements required.</li></ul>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Customer Classification</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">The Financial Conduct Authority (FCA) have three levels of client: Retail, Professional and Eligible Counterparties. Different levels of protection apply to each.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">We have classified you as a Retail Client and, as such, you will be afforded the highest level of protection.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">In the event of an unresolved dispute you will have a right of referral to the Financial Ombudsman Service (FOS) and may be entitled to benefit from the maximum protection available under the Financial Services Compensation Scheme (FSCS). It should be noted that not all Retail Clients are eligible claimants under the FSCS but, as a private individual, you are classified as an eligible complainant.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">This agreement is personal to you and not assignable. We may accept instructions from and give information to third parties or your other advisers on your behalf where you have confirmed in writing we may do so. We cannot accept any responsibility for errors in information supplied by such persons. Where you are a trustee, director or officer of any trust, corporation or LLP requiring advice you warrant to us that you have full authority to act on behalf of the same and there are no restrictions on the limits of our advice of which we have not been made aware. We will not be responsible for advising on compliance with your trust, trustee, director or officer obligations.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Our Services</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We provide you with an initial consultation free of charge. This helps us to understand your financial objectives and will confirm how we can support you in working towards these. We will also discuss the cost, and levels, of our services both initially and throughout our relationship with you.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Financial Review and Recommendation</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">This can be a continuation from the initial discussion, where agreed, or a further appointment. This process covers the:</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>gathering of information about your existing financial arrangements and full personal circumstances.</li><li>understanding of your investment knowledge and attitude and tolerance towards investment risk.</li><li>recommendation of an asset allocation model that matches your risk profile and the subsequent assessment and suitability of any existing holdings.</li><li>preparation of our recommendations to you.</li><li>arranging a second appointment to explain and discuss our recommendations in detail.</li></ul>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Policy Arrangement &amp; Implementation</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Should you instruct us to proceed with any of our recommendations we will act for you in the following ways:</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>handle all fund and policy administration on your behalf.</li><li>provide regular updates to keep you informed of progress.</li><li>ensure all your documents are issued in line with your expectations.</li><li>provide confirmation of all actions taken on your behalf in writing.</li></ul>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">The Cost of Our Services</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You will pay for our services by either a fee or a combination of fee and/or fee by payment facilitation through product charging. We will discuss your payment options with you and answer any questions you have. We will not charge you until we have agreed with you how we are to be paid.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">For payment options relating to investment advice, please refer to paragraph 17. For payment options relating to pure protection products, please refer to paragraph 17.2. Value Added Tax (VAT) may be payable on some or all of the work we do. We will inform you if VAT is applicable.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Investment Advice</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">When paying by fee, you will pay us for our advice and services (whether you buy a product or not) at an amount or a rate agreed before we commence any work. Our fees may include VAT. Where this is the case you will be informed and invoiced accordingly.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Our hourly rates are:</p>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:14px;overflow:hidden;margin:0 0 22px;max-width:460px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid rgba(76,30,52,0.1);"><span style="font-weight:700;color:#4C1E34;">Director</span><span style="color:#4C1E34;">£300 per hour</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid rgba(76,30,52,0.1);"><span style="font-weight:700;color:#4C1E34;">Financial adviser</span><span style="color:#4C1E34;">£250 per hour</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid rgba(76,30,52,0.1);"><span style="font-weight:700;color:#4C1E34;">Paraplanner</span><span style="color:#4C1E34;">£150 per hour</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;"><span style="font-weight:700;color:#4C1E34;">Administration</span><span style="color:#4C1E34;">£75 per hour</span></div>
+        </div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">These fees are indicative only and, in any event, are subject to review annually.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">In cases that we deem to be complex in nature, our fees may be higher than our stated rates. However, we will always provide you with a breakdown of our estimated fee and agree this with you prior to undertaking any work.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You may wish to set a fixed amount of fees that cannot be exceeded without further reference to you, in which case please speak with your Adviser. Where charging a fixed fee we will provide you with a fee agreement showing the actual fee that will be payable for the agreed service being provided. Where charging an hourly rate we will provide a letter of engagement to indicate how much we might charge in total.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Payment Facilitation by Product Charging &ndash; Lump Sum Investments or Non-Defined Benefit Pension Transfers</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Should you agree to proceed with our recommendation, our charge for this service is based on a percentage of the amount you invest and/or transfer. These charges are applied as follows but are subject to a minimum of £3,000:</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>Up to 3% fee i.e. for a £150,000 investment/transfer, our fee would equate to £4,500.</li></ul>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Example 1: if your investments are valued at £50,000, the initial fee would be £1,500. As this is less than the minimum fee of £3,000, we would charge you an extra £1,500 so the total fee would therefore be £3,000.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Example 2: if your investments are valued at £250,000, the initial fee would be £7,500. As this exceeds the financial review and recommendation fee, no other charges would be applied.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">This payment can either be taken from your investment upon receipt by the policy provider or paid directly by you.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Under the terms of this agreement we may, if appropriate, advise you on investments which are not readily realisable. We would draw your attention to the risks associated with these investments as there is a restricted market for them. In some circumstances it may therefore not be possible to deal in the investment or obtain reliable information about its value.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Your Payment Options</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <h3 style="font-family:Chivo,sans-serif;font-weight:700;font-size:18px;color:#4C1E34;margin:22px 0 8px;">Settling your adviser charge through a single payment</h3>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You will be required to settle the payment of our fees on completion of our work in 30 days. We accept cheque or card payments. We do not accept payment by cash. You will be provided with a receipt upon payment.</p>
+        <h3 style="font-family:Chivo,sans-serif;font-weight:700;font-size:18px;color:#4C1E34;margin:22px 0 8px;">Pure Protection Products</h3>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">17.2 If you implement a protection product you may elect that we are remunerated by commission.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">The commission is paid directly by the provider. Although you pay nothing up front that does not mean our service is free. The commission paid to us forms part of a &lsquo;product charge&rsquo; which you pay when you purchase the product. Product charges pay for the product provider&rsquo;s own costs and any commission payable to third parties.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You may elect that we arrange for the protection premium to be discounted by the commission that otherwise might have been payable under the policy recommended. In this instance you will need to pay a fee appropriate to cover our advice and work, in accordance with paragraph 17.2 above.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">The amount of commission we receive will vary depending on the type of policy and (sometimes) the term of the policy or your age, as in the following example:</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">A male aged 43 for £100,000 Life Insurance for 20 years would pay £10.01 per month we may receive commission of £175.57 initially then £0.25 per month from month 49 for the remainder of the term.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Payment for Ongoing Services</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Please refer to our separate document &ldquo;Service Proposition and Engagement&rdquo;.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Client Money</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">For your additional security we do not handle client&rsquo;s money. We never accept a cheque made out to us (unless it is a cheque in settlement of our fees or other charges or disbursements for which we have sent you an invoice). We do not handle cash. Cheques for payment will be required to be paid direct to the insurance provider.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Accounting to You</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We will make arrangements for all your investments/contracts to be registered in your name unless you first instruct us otherwise in writing. You have a right to inspect copies of contract notes and entries in our records in relation to transactions on your behalf. In that request we reserve the right to give you copies of such documents rather than access to the original records.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We will forward to you all documents showing ownership of your policies as soon as practicable after we receive them. Where a number of documents relating to a series of transactions is involved, we will normally hold each document until the series is complete and then forward them to you.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Financial Services Compensation Scheme (FSCS)</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We subscribe to the Financial Services Compensation Scheme (FSCS). You may be entitled to compensation from the scheme if we cannot meet our obligations. This depends on the type of business and the circumstances of the claim. You will find up-to-date details of the FSCS&rsquo;s compensation limits, eligibility and details of how to make a claim on its website <a href="https://www.fscs.org.uk" target="_blank" rel="noopener noreferrer" style="color:#AB2232;font-weight:700;">www.fscs.org.uk</a>. As at May 2021, the limits are:</p>
+        <h3 style="font-family:Chivo,sans-serif;font-weight:700;font-size:18px;color:#4C1E34;margin:22px 0 8px;">Investment</h3>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Most types of investment business are covered for 100% of the first £85,000.</p>
+        <h3 style="font-family:Chivo,sans-serif;font-weight:700;font-size:18px;color:#4C1E34;margin:22px 0 8px;">Insurance</h3>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Insurance Business: there is no upper limit on the amount of protection. (for claims against firms declared in default from 3 July 2015).</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>Long-term insurance benefits are protected 100%. Claims under compulsory insurance, professional insurance and certain claims for injury, sickness or infirmity of the policyholder are protected at 100%</li><li>Protects 90% of other types of claim with no upper limit.</li><li>Further information about compensation scheme arrangements is available from the FSCS.</li></ul>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Complaints</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">If you should have any complaint about the advice you receive or a product you have bought, please write or call Audley Wealth Censeo House 6 St Peter&rsquo;s Street St Albans Herts AL1 3LF 01727 227 557.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">If following our subsequent investigation and response you are still not satisfied you may contact the Financial Ombudsman Service (<a href="https://www.financial-ombudsman.org.uk" target="_blank" rel="noopener noreferrer" style="color:#AB2232;font-weight:700;">www.financial-ombudsman.org.uk</a>; Exchange Tower, Harbour Exchange, London, E14 9SR). Full details are contained within our internal complaint&rsquo;s procedure, which is available to you on request at any time.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Cancellation Rights</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">The cancellation rights for each individual policy you have been advised on will be explained to you in your suitability report which we will give you before or at the time you confirm or carry out the transaction. Where the provider is already in receipt of the investment proceeds and cancellation is requested within the cancellation period, we will instruct the provider to refund the proceeds net/gross of the adviser charging agreed.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Material Interests / Conflict of Interests</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Occasions can arise where we, or one of our other customers, will have some form of interest in business, which we are transacting for you.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">As a consequence of such potential conflicts arising, we have put arrangements in place to ensure all our clients are treated fairly.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We have also implemented a conflicts of interest policy to help us to all appropriate steps to manage such risks.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">While we take all appropriate steps to mitigate such risks, if we are unable to mitigate the risks from a potential conflict, before we undertake any actions on your behalf, we will inform you in writing with:</p>
+        <ul style="font-size:16px;line-height:1.75;color:#4C1E34;padding-left:22px;display:flex;flex-direction:column;gap:16px;margin:0 0 22px;list-style:disc;"><li>A specific description of the conflicts that has arisen.</li><li>A clearly documented statement of the steps the firm has taken to prevent the conflict.</li><li>An explanation of the remaining risks that are posed to your interest.</li></ul>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We may give or receive minor non-monetary benefits to/from some of the firms with whom we work in order to offer you a better service. Such benefits may include information relating to financial instruments or investment services; participation in conferences, seminars and training events; and minor hospitality (such as food and drink during a business meeting, conference, seminar or training event). Any costs we incur in provision of such benefits will not affect the charges you pay for our service. Further information regarding these arrangements is available on request.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Risk Warnings</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Relevant risk warnings will be advised to you throughout the financial planning process and in your suitability report.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">The value of investments may go down as well as up, and you may not get back the amount invested. Levels of income from investments may fluctuate. We cannot be held liable for any depreciation in the value of investments arranged for you. Non-readily realisable investments will generally have a restricted market, and therefore it may be difficult to deal in that investment or to obtain reliable information about its value.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">For insurance products, your insurance policy may lapse if you do not keep up to date with regular premium payments and you may not be covered if a claim is made.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Termination of Authority</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You or we may terminate our authority and/or this agreement to act on your behalf at any time without penalty. Notice of this termination must be given in writing and will take effect from the date of receipt. Termination is without prejudice to any transactions already initiated which will be completed according to this client agreement unless otherwise agreed in writing. You will be liable to pay for any transactions made prior to termination and any fees which may be outstanding.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Data Protection</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">We are authorised and regulated by the Financial Conduct Authority (&ldquo;FCA&rdquo;). In order to assist us to comply with our legal and regulatory obligations we may share your personal data so we can comply with our legal and regulatory obligations; undertake compliance monitoring; deal with complaints; report internally within its group; respond to any FCA queries; liaise with its insurers; undertake audits; and where required by law to respond to enquiries from law enforcement agencies and government bodies.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Anti-Money Laundering</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We are required to verify your identity in accordance with the Proceeds of Crime Act 2002 and the Money Laundering Regulations 2007. We reserve the right to approach third parties and to delay any applications until adequate verification of identity has been obtained.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Governing Law &amp; Jurisdiction</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <h3 style="font-family:Chivo,sans-serif;font-weight:700;font-size:18px;color:#4C1E34;margin:22px 0 8px;">Liability</h3>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You agree to indemnify us in relation to any acts, proceedings or claims which we incur directly or indirectly as a result of our acting under this agreement save that this indemnity shall not apply to the extent it arises out of our negligence, fraud, breach of this agreement or our regulatory responsibilities.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">We reserve the right to amend this agreement at our discretion where changes in regulation or law necessitate by giving you notice in writing. You will also be given the option to accept our new agreements or terminate our authority. This agreement shall be governed by and construed according to English law. Any disputes shall be determined in the jurisdiction of the English Courts.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">Where a formal written notice is required by this agreement then it shall be in writing (not email unless agreed in advance by the parties) and sent by first class post and deemed effective two business days after posting.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Force Majeure</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">Audley Wealth shall not be in breach of this Agreement and shall not incur any liability to you if there is any failure to perform its duties due to any circumstances reasonably beyond its control.</p>
+      </div>
+
+      <div style="margin-top:48px;"><h2 style="font-family:'Alfa Slab One',serif;font-weight:400;font-size:30px;line-height:1.1;color:#4C1E34;margin:0 0 6px;">Client&rsquo;s Agreement</h2><div class="aw-rule" style="width:100px;height:3px;background:#AB2232;border-radius:2px;margin-bottom:22px;"></div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;font-weight:700;margin:0 0 18px;">This is our Client Agreement upon which we intend to rely. For your own benefit and protection, you should read these terms carefully before signing them. If you do not understand any point please ask for further information.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">I/we understand and consent to the terms of this client agreement and I/we hereby authorise the transfer of information, as described above, on a confidential basis when warranted between such third parties.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">I/We authorise you to liaise with my/our other professional advisers in exchanging relevant personal information pertinent to my/our financial planning requirements and to rely on any such information provided.</p>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">My/our preferred method of paying these costs is (please tick as appropriate):</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin:0 0 22px;">
+          <div style="display:flex;align-items:center;gap:14px;"><span style="width:26px;height:26px;border:1.5px solid #4C1E34;border-radius:5px;flex:0 0 auto;"></span><span style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin:0;">(where possible) By deduction from the policy</span></div>
+          <div style="display:flex;align-items:center;gap:14px;"><span style="width:26px;height:26px;border:1.5px solid #4C1E34;border-radius:5px;flex:0 0 auto;"></span><span style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin:0;">By direct payment</span></div>
+        </div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;">You should note that when paid through the investments it may reduce your personal tax thresholds and/or exemption levels. Where this happens we will discuss it with you and confirm it in your personal recommendation report.</p>
+        <div style="background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:16px;padding:32px;margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:28px 40px;">
+          <div><div style="font-weight:700;color:#4C1E34;margin-bottom:26px;">Client Name</div><div style="border-bottom:1px dotted #4C1E34;opacity:0.6;"></div></div>
+          <div><div style="font-weight:700;color:#4C1E34;margin-bottom:26px;">Client Signature</div><div style="border-bottom:1px dotted #4C1E34;opacity:0.6;"></div></div>
+          <div><div style="font-weight:700;color:#4C1E34;margin-bottom:26px;">Date</div><div style="border-bottom:1px dotted #4C1E34;opacity:0.6;"></div></div>
+          <div><div style="font-weight:700;color:#4C1E34;margin-bottom:26px;">Date of Issue</div><div style="border-bottom:1px dotted #4C1E34;opacity:0.6;"></div></div>
+          <div style="grid-column:1 / -1;"><div style="font-weight:700;color:#4C1E34;margin-bottom:26px;">Signed on behalf of firm</div><div style="border-bottom:1px dotted #4C1E34;opacity:0.6;max-width:300px;"></div></div>
+        </div>
+        <p style="font-size:16px;line-height:1.75;color:#4C1E34;margin:0 0 18px;margin-top:24px;font-style:italic;">NB: In relation to your chosen level of ongoing service this will be agreed separately within our Service Proposition &amp; Engagement document.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div style="height:6px;background:linear-gradient(90deg,#CDDFDD 0%,#FEB18A 100%);"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="aw-footer" style="background:#4C1E34;color:#FEF9EC;padding:72px 0 40px;">
+    <div class="aw-footer-grid" style="max-width:1320px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 0.9fr 1.3fr 1.05fr;gap:48px;">
+      <div>
+        <div style="color:#FEF9EC;width:130px;margin-bottom:20px;">
+          <svg viewBox="0 0 148.802 98.231" style="width:100%;height:auto;display:block;" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fillRule="nonzero" transform="translate(61.31 67.171)" d="M 8.95 0.01 L 9.99 0.01 L 7.86 7.78 L 6.87 7.78 L 5.23 1.86 C 5.09 1.37 5.01 1.06 4.99 0.95 C 4.91 1.31 4.83 1.61 4.76 1.86 L 3.11 7.78 L 2.06 7.78 L 0 0.01 L 1.06 0.01 L 2.24 5.1 C 2.37 5.63 2.48 6.16 2.57 6.69 C 2.77 5.86 2.88 5.38 2.92 5.25 L 4.4 0 L 5.64 0 L 6.75 3.93 C 7.03 4.9 7.23 5.82 7.36 6.68 C 7.46 6.19 7.59 5.63 7.75 4.99 L 8.97 0 L 8.95 0.01 Z M 18.04 4.22 L 22.35 4.22 L 22.35 3.31 L 18.04 3.31 L 18.04 0.93 L 22.64 0.93 L 22.64 0.01 L 17.01 0.01 L 17.01 7.78 L 22.82 7.78 L 22.82 6.86 L 18.04 6.86 L 18.04 4.22 Z M 32.92 0.01 L 36.11 7.78 L 34.94 7.78 L 34.03 5.43 L 30.78 5.43 L 29.93 7.78 L 28.84 7.78 L 31.83 0.01 L 32.94 0.01 L 32.92 0.01 Z M 33.71 4.59 L 32.9 2.44 C 32.65 1.79 32.47 1.25 32.35 0.83 C 32.25 1.33 32.11 1.82 31.93 2.31 L 31.07 4.59 L 33.71 4.59 Z M 43.36 0.01 L 42.33 0.01 L 42.33 7.78 L 47.19 7.78 L 47.19 6.86 L 43.36 6.86 L 43.36 0.01 Z M 53.28 0.93 L 55.85 0.93 L 55.85 7.78 L 56.88 7.78 L 56.88 0.93 L 59.46 0.93 L 59.46 0.01 L 53.29 0.01 L 53.29 0.93 L 53.28 0.93 Z M 71.46 0.01 L 71.46 3.2 L 67.41 3.2 L 67.41 0.01 L 66.38 0.01 L 66.38 7.78 L 67.41 7.78 L 67.41 4.12 L 71.46 4.12 L 71.46 7.78 L 72.49 7.78 L 72.49 0.01 L 71.46 0.01 Z" /><path fillRule="nonzero" transform="translate(67.52 0)" d="M 3.26 22.571 C 11.38 3.841 21.05 3.021 22.63 3.021 C 22.75 3.021 22.83 3.021 22.85 3.021 L 22.93 3.021 L 23.02 3.021 L 23.04 3.021 C 31.92 3.021 41.12 13.741 41.21 13.841 C 41.28 13.921 44.12 17.331 48.49 22.551 L 52.4 22.551 C 47.12 16.251 43.58 12.011 43.5 11.911 C 43.09 11.431 33.34 0.061 23.08 0.021 C 21.69 -0.099 9.49 -0.419 0 22.551 L 3.26 22.551 L 3.26 22.571 Z" /><path fillRule="nonzero" transform="translate(50.408 44.321)" d="M 92.912 5.96 C 91.232 3.99 89.532 1.99 87.842 0 L 86.642 3.23 C 87.972 4.8 89.302 6.36 90.622 7.91 C 94.132 12.03 95.802 17.03 95.322 21.99 C 94.862 26.76 92.412 31.14 88.402 34.34 C 82.582 38.98 74.782 40.7 67.242 42.37 C 65.802 42.69 64.382 43 62.992 43.33 C 59.832 44.08 56.552 45.05 53.082 46.08 C 42.792 49.13 31.122 52.59 21.472 50 C 10.642 47.09 3.052 38.18 2.992 28.33 C 2.982 26.26 3.172 24.21 3.512 22.18 L 0.472 22.18 C 0.162 24.21 -0.018 26.26 0.002 28.34 C 0.062 39.53 8.572 49.63 20.702 52.89 C 23.372 53.61 26.142 53.91 28.962 53.91 C 37.242 53.91 45.992 51.31 53.942 48.95 C 57.372 47.93 60.612 46.97 63.692 46.24 C 65.062 45.91 66.472 45.6 67.892 45.29 C 75.772 43.55 83.911 41.76 90.271 36.68 C 94.911 32.97 97.772 27.86 98.302 22.27 C 98.852 16.49 96.932 10.7 92.902 5.96 L 92.912 5.96 Z" /><path fillRule="nonzero" transform="translate(0 25.361)" d="M 7.92 29.37 L 6.42 38.13 L 0 38.13 L 6.18 4.18 C 6.62 1.76 8.73 0 11.19 0 C 13.66 0 15.77 1.77 16.2 4.19 L 22.29 38.13 L 15.82 38.13 L 14.36 29.37 L 7.92 29.37 Z M 10.86 10.72 L 8.87 23.77 L 13.45 23.77 L 11.46 10.72 C 11.41 10.37 10.91 10.37 10.86 10.72 Z" /><path fillRule="nonzero" transform="translate(26.56 25.361)" d="M 9.74 38.61 C 7.03 38.61 4.73 37.73 2.84 35.97 C 0.95 34.21 0 32.07 0 29.56 L 0 0 L 6.04 0 L 6.04 29.5 C 6.04 30.41 6.39 31.18 7.08 31.82 C 7.78 32.46 8.61 32.78 9.58 32.78 C 10.55 32.78 11.4 32.46 12.08 31.82 C 12.76 31.18 13.1 30.41 13.1 29.5 L 13.1 0 L 19.54 0 L 19.54 29.56 C 19.54 32.11 18.58 34.26 16.67 36 C 14.75 37.74 12.44 38.61 9.73 38.61 L 9.74 38.61 Z" /><path fillRule="nonzero" transform="translate(51.58 25.361)" d="M 19.4 29.01 C 19.4 31.52 18.45 33.66 16.55 35.45 C 14.65 37.23 12.37 38.13 9.7 38.13 L 0 38.13 L 0 0 L 9.7 0 C 12.39 0 14.68 0.89 16.57 2.68 C 18.46 4.46 19.4 6.6 19.4 9.1 L 19.4 29.02 L 19.4 29.01 Z M 6.18 32.44 L 9.9 32.44 C 10.88 32.44 11.71 32.11 12.38 31.45 C 13.05 30.79 13.39 30.01 13.39 29.12 L 13.39 9.18 C 13.39 8.27 13.05 7.5 12.36 6.85 C 11.67 6.2 10.85 5.88 9.9 5.88 L 6.18 5.88 L 6.18 32.45 L 6.18 32.44 Z" /><path fillRule="nonzero" transform="translate(76.39 25.361)" d="M 16.84 38.13 L 0 38.13 L 0 0 L 6.17 0 L 6.17 32.42 L 16.83 32.42 L 16.83 38.13 L 16.84 38.13 Z" /><path fillRule="nonzero" transform="translate(97.45 25.361)" d="M 0 38.13 L 0 0 L 17.58 0 L 17.58 5.75 L 6.18 5.75 L 6.18 16.2 L 14.51 16.2 L 14.51 21.95 L 6.18 21.95 L 6.18 32.38 L 17.58 32.38 L 17.58 38.13 L 0 38.13 Z" /><path fillRule="nonzero" transform="translate(119.27 25.361)" d="M 8.26 22.16 L 0 0 L 6.78 0 L 11.37 13.69 L 15.92 0 L 22.74 0 L 14.43 22.16 L 14.43 38.13 L 8.26 38.13 L 8.26 22.16 Z" /></svg>
+        </div>
+        <p style="font-size:13px;line-height:1.6;color:#FEF9EC;opacity:0.75;margin:0;">A genuinely fresh, no nonsense approach to financial planning, pension planning, retirement planning and asset management.</p>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Useful Links</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px;opacity:0.9;">
+          <a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">About Us</a><a href="Service Pages.dc.html" class="aw-flink" style="text-decoration:none;">Services</a><a href="Financial Focus.dc.html" class="aw-flink" style="text-decoration:none;">Financial Focus</a><a href="News.dc.html" class="aw-flink" style="text-decoration:none;">News</a><a href="Client Stories.dc.html" class="aw-flink" style="text-decoration:none;">Client Stories</a><a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">Our Team</a><a href="Product Updates.dc.html" class="aw-flink" style="text-decoration:none;">Product Updates</a><a href="Downloads.dc.html" class="aw-flink" style="text-decoration:none;">Downloads</a><a href="Contact Us.dc.html" class="aw-flink" style="text-decoration:none;">Contact Us</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Contacts</div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">St Albans Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">Censeo House, 6 St Peter&rsquo;s Street, St Albans AL1 3LF</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227 557</a></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Edinburgh Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">EH20 Business Centre, 6 Dryden Road, Bilston Glen Ind Estate, Midlothian EH20 9LZ</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:01316549819" style="color:inherit;text-decoration:none;">0131 654 9819</a></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">London Office</div>
+            <div style="font-size:13px;line-height:1.5;opacity:0.78;">1 Giltspur Street, London EC1A 9DD</div>
+            <div style="display:flex;align-items:center;gap:7px;margin-top:6px;font-size:13.5px;font-weight:700;color:#FEB18A;"><span style="font-size:13px;">&#9742;</span><a href="tel:02034404165" style="color:inherit;text-decoration:none;">020 3440 4165</a></div>
+          </div>
+          <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;padding-top:4px;border-top:1px solid rgba(247,235,217,0.12);padding-top:16px;"><span style="flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9993;</span><span>enquiries@audleywealth.com</span></div>
+          <div style="display:flex;gap:12px;font-size:14px;line-height:1.5;"><span style="flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#AB2232;color:#F7EBD9;display:flex;align-items:center;justify-content:center;font-size:13px;">&#9719;</span><span>Mon&ndash;Fri 9:00&ndash;17:30</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Accreditations</div>
+        <div style="display:flex;gap:14px;">
+          <div style="width:77px;height:77px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="brand/badge-pfs.webp" alt="PFS" style="width:58px;height:58px;object-fit:contain;" /></div>
+          <div style="width:77px;height:77px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="brand/badge-ifp.webp" alt="IFP" style="width:58px;height:58px;object-fit:contain;" /></div>
+        </div>
+        <div style="font-weight:700;font-size:14px;margin:26px 0 12px;opacity:0.85;">Client reviews</div>
+        <a href="https://www.vouchedfor.co.uk/financial-advisor-ifa/dollis-hill/031629-alun-webster/reviews" target="_blank" rel="noopener noreferrer" class="aw-vf" style="display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;color:#FEF9EC;background:rgba(247,235,217,0.06);border:1px solid rgba(247,235,217,0.18);border-radius:12px;padding:12px 16px;width:100%;overflow:hidden;">
+          <div class="vf-stars" style="min-height:26px;flex:0 0 auto;"></div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#FEB18A;font-weight:700;flex:0 0 auto;">Reviews
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div style="max-width:1320px;margin:48px auto 0;padding-top:28px;border-top:1px solid rgba(247,235,217,0.18);font-size:12px;line-height:1.7;color:#FEF9EC;opacity:0.7;">
+      Audley Wealth Ltd is authorised and regulated by the Financial Conduct Authority Firm Reference Number 955306. Registered Address: 4 Capricorn Centre, Cranes Farm Road, Basildon, Essex, SS14 3JJ, Registered in England &amp; Wales, Company No: 12406200
+      <br /><br />
+      &ldquo;The content of this is for information purposes only and should not be treated as advice. Independent personalised advice should be sought before taking action. Investing involves risk. The value of investments, and the income from them, may fall as well as rise. Investors may not get back the original amount invested.&rdquo;
+    </div>
+    <div style="max-width:1320px;margin:24px auto 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;opacity:0.85;">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;"><a href="Client Agreement.dc.html" class="aw-flink" style="text-decoration:none;">Client Agreement</a><a href="Privacy Centre.dc.html" class="aw-flink" style="text-decoration:none;">Privacy Centre</a><a href="Terms of Use.dc.html" class="aw-flink" style="text-decoration:none;">Terms of use | Privacy Environmental Policy</a></div>
+      <span>Copyright &copy; 2026</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { activeGuide: null, modalSent: false };
+  componentDidMount() {
+    this._onScroll = () => { if (this._raf) return; this._raf = requestAnimationFrame(() => { this._raf = 0; this._check(); }); };
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    window.addEventListener("resize", this._onScroll, { passive: true });
+    this._startPoll();
+    this._check();
+    this._loadVouchedFor();
+  }
+  componentDidUpdate() { this._startPoll(); requestAnimationFrame(() => this._check()); }
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this._onScroll);
+    window.removeEventListener("resize", this._onScroll);
+    if (this._poll) clearInterval(this._poll);
+  }
+  _startPoll() { if (this._poll) clearInterval(this._poll); this._poll = setInterval(() => this._check(), 200); }
+  _reduced() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  _check() {
+    const root = document.querySelector("[data-aw-root]");
+    if (!root) return;
+    if (this._reduced()) {
+      root.querySelectorAll(".aw-rule").forEach((e) => e.classList.add("drawn"));
+      root.querySelectorAll(".aw-card").forEach((e) => e.classList.add("aw-shown"));
+      if (this._poll) { clearInterval(this._poll); this._poll = 0; }
+      return;
+    }
+    const trigger = window.innerHeight * 0.92;
+    root.querySelectorAll(".aw-rule:not(.drawn)").forEach((e) => { if (e.getBoundingClientRect().top < trigger) e.classList.add("drawn"); });
+    root.querySelectorAll("section").forEach((sec) => {
+      const cards = [].slice.call(sec.querySelectorAll(".aw-card:not(.entered)"));
+      if (!cards.length) return;
+      if (sec.getBoundingClientRect().top < trigger) {
+        cards.forEach((c, i) => {
+          c.style.animationDelay = (0.04 + (i % 3) * 0.08) + "s";
+          c.classList.add("entered");
+          const done = () => { c.classList.add("aw-shown"); c.style.animation = "none"; };
+          c.addEventListener("animationend", done, { once: true });
+          setTimeout(done, 1600);
+        });
+      }
+    });
+    const pending = root.querySelectorAll(".aw-rule:not(.drawn), .aw-card:not(.entered)").length;
+    if (!pending && this._poll) { clearInterval(this._poll); this._poll = 0; }
+  }
+  _loadVouchedFor() {
+    const els = Array.from(document.querySelectorAll(".vf-stars")).filter((el) => !el.dataset.loaded);
+    if (!els.length) return;
+    const url = "https://api.vouchedfor.co.uk/v2/public/professional/31629/widget?type=stars_centre_transparent_light&version=vf2023";
+    fetch(url).then((r) => (r.ok ? r.text() : Promise.reject(r.status))).then((html) => {
+      els.forEach((el) => { el.dataset.loaded = "1"; el.innerHTML = html; });
+    }).catch(() => {
+      els.forEach((el) => { el.dataset.loaded = "1"; el.innerHTML = '<span style="color:#FEB18A;font-size:18px;letter-spacing:2px;">\u2605\u2605\u2605\u2605\u2605</span>'; });
+    });
+  }
+  renderVals() {
+    const self = this;
+    const mk = (name) => () => self.setState({ activeGuide: name, modalSent: false });
+    return {
+      modalOpen: !!this.state.activeGuide,
+      activeGuide: this.state.activeGuide || "",
+      notSentModal: !this.state.modalSent,
+      sentModal: !!this.state.modalSent,
+      open: {
+        retirementIncome: mk("Retirement Income"),
+        financialPlanning: mk("Financial Planning"),
+        inheritanceTax: mk("Inheritance Tax"),
+        investing: mk("Investing"),
+        pensions: mk("Pensions")
+      },
+      closeModal: () => self.setState({ activeGuide: null }),
+      stop: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+      submitModal: (e) => { if (e && e.preventDefault) e.preventDefault(); self.setState({ modalSent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
