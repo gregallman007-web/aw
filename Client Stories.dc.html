@@ -172,9 +172,38 @@
   .aw-hdr{transition:box-shadow .3s ease;}
   .aw-hdr.aw-hdr-on{box-shadow:0 8px 24px rgba(76,30,52,0.1);}
   @media (prefers-reduced-motion: reduce){.aw-hdr{transition:none;}}
+
+  @media (max-width:560px){ .aw-cta-num{ display:none !important; } }
 </style>
 <script>
 (function(){function upd(){var h=document.querySelector('.aw-hdr');if(!h)return;var y=Math.max(window.scrollY||0,document.documentElement.scrollTop||0,document.body.scrollTop||0);h.classList.toggle('aw-hdr-on',y>40);}document.addEventListener('scroll',upd,true);window.addEventListener('resize',upd,{passive:true});document.addEventListener('DOMContentLoaded',upd);setTimeout(upd,300);setTimeout(upd,1200);})();
+</script>
+<script>
+(function(){
+function fmt(b,cur,dis){b.style.cssText='min-width:40px;height:40px;padding:0 13px;border-radius:10px;border:1px solid rgba(76,30,52,0.25);background:'+(cur?'#4C1E34':'transparent')+';color:'+(cur?'#F7EBD9':'#4C1E34')+';font-family:Chivo,sans-serif;font-weight:700;font-size:14px;cursor:'+((dis||cur)?'default':'pointer')+';opacity:'+(dis?'0.35':'1')+';';}
+function init(grid){
+ if(grid.__pag)return;grid.__pag=true;
+ var size=parseInt(grid.getAttribute('data-paginate'),10)||9,page=0;
+ var nav=grid.nextElementSibling;
+ if(!nav||!nav.hasAttribute('data-pag-nav'))return;
+ function go(p){page=p;render();var sc=document.scrollingElement||document.documentElement;var top=grid.getBoundingClientRect().top+(sc.scrollTop||document.body.scrollTop||0)-120;if(top<0)top=0;sc.scrollTop=top;document.body.scrollTop=top;}
+ function render(){
+  var items=[].slice.call(grid.children);
+  var pages=Math.max(1,Math.ceil(items.length/size));
+  if(page>pages-1)page=pages-1;
+  for(var i=0;i<items.length;i++)items[i].style.display=(i>=page*size&&i<(page+1)*size)?'':'none';
+  if(pages<2){nav.style.display='none';return;}
+  nav.style.cssText='display:flex;justify-content:center;align-items:center;gap:10px;margin-top:44px;';
+  nav.innerHTML='';
+  var prev=document.createElement('button');prev.innerHTML='&#8249;';fmt(prev,false,page===0);if(page>0)prev.onclick=function(){go(page-1);};nav.appendChild(prev);
+  for(var p=0;p<pages;p++)(function(p){var b=document.createElement('button');b.textContent=p+1;fmt(b,p===page,false);if(p!==page)b.onclick=function(){go(p);};nav.appendChild(b);})(p);
+  var nx=document.createElement('button');nx.innerHTML='&#8250;';fmt(nx,false,page===pages-1);if(page<pages-1)nx.onclick=function(){go(page+1);};nav.appendChild(nx);
+ }
+ render();
+ new MutationObserver(function(){page=0;render();}).observe(grid,{childList:true});
+}
+setInterval(function(){var g=document.querySelectorAll('[data-paginate]');for(var i=0;i<g.length;i++)init(g[i]);},600);
+})();
 </script>
 </helmet>
 <div data-aw-root style="background:#F7EBD9;font-family:Chivo,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#4C1E34;width:100%;overflow-x:hidden;padding-top:87px;">
@@ -192,8 +221,8 @@
         <div class="aw-menu" style="position:relative;cursor:pointer;padding:6px 0;">
           <span style="color:#4C1E34;display:inline-flex;align-items:center;gap:6px;">Services <span style="font-size:9px;line-height:1;">&#9660;</span></span>
           <div class="aw-drop" style="position:absolute;top:100%;left:50%;min-width:200px;background:#FEF9EC;border:1px solid rgba(76,30,52,0.12);border-radius:12px;box-shadow:0 14px 34px rgba(12,12,13,0.14);padding:8px;z-index:60;">
-            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Pensions</a>
-            <a href="Service Pages.dc.html" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Investments</a>
+            <a href="Service Pages.dc.html#pensions" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Pensions</a>
+            <a href="Service Pages.dc.html#investments" style="display:block;padding:11px 16px;border-radius:8px;font-size:15px;font-weight:400;color:#4C1E34;text-decoration:none;white-space:nowrap;" style-hover="background:#F7EBD9;color:#AB2232;">Investments</a>
           </div>
         </div>
         <a href="Financial Focus.dc.html" class="aw-navlink" style="cursor:pointer;color:#4C1E34;text-decoration:none;">Financial Focus</a>
@@ -236,7 +265,7 @@
         <sc-if value="{{ fEmployeeOn }}" hint-placeholder-val="{{ false }}"><div onClick="{{ fEmployeeSet }}" class="aw-tab aw-tab-solid" style="cursor:pointer;padding:10px 20px;border-radius:10px;font-weight:700;font-size:14px;border:2px solid #AB2232;background:#AB2232;color:#FEF9EC;">Employee Benefits</div></sc-if>
         <sc-if value="{{ fEmployeeOff }}" hint-placeholder-val="{{ true }}"><div onClick="{{ fEmployeeSet }}" class="aw-tab aw-tab-ghost" style="cursor:pointer;padding:10px 20px;border-radius:10px;font-weight:700;font-size:14px;border:2px solid rgba(76,30,52,0.25);background:transparent;color:#4C1E34;">Employee Benefits</div></sc-if>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px;">
+      <div data-paginate="9" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px;">
         <sc-for list="{{ gridCards }}" as="c" hint-placeholder-count="6">
           <div onClick="{{ c.onOpen }}" class="aw-card" style="cursor:pointer;background:#FEF9EC;border:1px solid rgba(76,30,52,0.1);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;">
         <div class="aw-photo" style="overflow:hidden;">{{ c.imgEl }}</div>
@@ -251,6 +280,7 @@
       </div>
         </sc-for>
       </div>
+      <div data-pag-nav="1" style="display:none;"></div>
     </div>
   </section>
   </sc-if>
@@ -270,7 +300,6 @@
   </div>
   <!-- ARTICLE BODY -->
   <section style="position:relative;overflow:hidden;background:#F7EBD9;padding:44px 40px 88px;">
-    <img src="brand/blob-fill-sage.svg" alt="" aria-hidden="true" style="position:absolute;bottom:-200px;right:-140px;width:540px;height:540px;opacity:0.4;pointer-events:none;z-index:0;" />
     <div style="position:relative;z-index:1;max-width:1060px;margin:0 auto;">
       <div onClick="{{ back }}" class="aw-flink" style="display:inline-flex;align-items:center;gap:8px;color:#AB2232;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:24px;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 6l-6 6 6 6"></path></svg>
@@ -332,10 +361,10 @@
         <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
           <div class="aw-btn" style="display:inline-flex;align-items:center;justify-content:center;height:60px;padding:0 40px;border-radius:10px;background:#AB2232;color:#FEF9EC;font-weight:700;font-size:16px;cursor:pointer;">Contact Us</div>
           <div style="display:inline-flex;align-items:center;gap:14px;color:#F7EBD9;font-weight:700;font-size:18px;cursor:pointer;">
-            <span class="aw-phone" style="width:54px;height:54px;border-radius:50%;background:rgba(247,235,247,0.1);background:rgba(247,235,217,0.1);border:1px solid rgba(247,235,217,0.32);display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
+            <span class="aw-phone" style="width:60px;height:60px;border-radius:50%;background:rgba(247,235,247,0.1);background:rgba(247,235,217,0.1);border:1px solid rgba(247,235,217,0.32);display:flex;align-items:center;justify-content:center;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
             </span>
-            <a href="tel:01727227557" style="color:inherit;text-decoration:none;">01727 227557</a>
+            <a href="tel:01727227557" class="aw-cta-num" style="color:inherit;text-decoration:none;">01727 227557</a>
           </div>
         </div>
       </div>
@@ -359,7 +388,7 @@
       <div>
         <div style="font-weight:700;font-size:16px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(171,34,50,0.7);">Useful Links</div>
         <div style="display:flex;flex-direction:column;gap:11px;font-size:14px;opacity:0.9;">
-          <a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">About Us</a><a href="Service Pages.dc.html" class="aw-flink" style="text-decoration:none;">Services</a><a href="Financial Focus.dc.html" class="aw-flink" style="text-decoration:none;">Financial Focus</a><a href="News.dc.html" class="aw-flink" style="text-decoration:none;">News</a><a href="Client Stories.dc.html" class="aw-flink" style="text-decoration:none;">Client Stories</a><a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">Our Team</a><a href="Product Updates.dc.html" class="aw-flink" style="text-decoration:none;">Product Updates</a><a href="Downloads.dc.html" class="aw-flink" style="text-decoration:none;">Downloads</a><a href="Contact Us.dc.html" class="aw-flink" style="text-decoration:none;">Contact Us</a>
+          <a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">About Us</a><a href="Service Pages.dc.html#pensions" class="aw-flink" style="text-decoration:none;">Pensions</a><a href="Service Pages.dc.html#investments" class="aw-flink" style="text-decoration:none;">Investments</a><a href="Financial Focus.dc.html" class="aw-flink" style="text-decoration:none;">Financial Focus</a><a href="News.dc.html" class="aw-flink" style="text-decoration:none;">News</a><a href="Client Stories.dc.html" class="aw-flink" style="text-decoration:none;">Client Stories</a><a href="About Us.dc.html" class="aw-flink" style="text-decoration:none;">Our Team</a><a href="Product Updates.dc.html" class="aw-flink" style="text-decoration:none;">Product Updates</a><a href="Downloads.dc.html" class="aw-flink" style="text-decoration:none;">Downloads</a><a href="Contact Us.dc.html" class="aw-flink" style="text-decoration:none;">Contact Us</a>
         </div>
       </div>
       <div>
@@ -414,6 +443,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
+  _top() { const sc = document.scrollingElement || document.documentElement; sc.scrollTop = 0; document.body.scrollTop = 0; window.scrollTo(0, 0); }
   state = { view: "grid", active: null, filter: "all" };
 
   stories() {
@@ -499,7 +529,7 @@ class Component extends DCLogic {
       hasExcerpt: !!s.copy, excerpt: s.copy ? this.firstSentence(s.paras[0]) : "",
       ctaLabel: s.copy ? "Read story" : "Read on audleywealth.com",
       onOpen: () => {
-        if (s.copy) { this.setState({ view: "detail", active: s.id }); window.scrollTo(0, 0); }
+        if (s.copy) { this.setState({ view: "detail", active: s.id }); this._top(); }
         else { window.open(s.url, "_blank", "noopener"); }
       }
     };
@@ -572,7 +602,7 @@ class Component extends DCLogic {
         ? { heading: active.heading, catLabel: active.catLabel, imgEl: React.createElement("img", { src: active.img, alt: active.heading, style: { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" } }), intro: active.paras[0], rest: active.paras.slice(1), hasRest: active.paras.length > 1 }
         : { heading: "", catLabel: "", imgEl: null, intro: "", rest: [], hasRest: false },
       related: related.map((s) => this.toCard(s)),
-      back: () => { this.setState({ view: "grid" }); window.scrollTo(0, 0); },
+      back: () => { this.setState({ view: "grid" }); this._top(); },
       fAllOn: f === "all", fAllOff: f !== "all", fAllSet: setF("all"),
       fRetirementOn: f === "retirement", fRetirementOff: f !== "retirement", fRetirementSet: setF("retirement"),
       fInvestmentOn: f === "investment", fInvestmentOff: f !== "investment", fInvestmentSet: setF("investment"),
